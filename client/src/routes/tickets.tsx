@@ -1,26 +1,53 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Ticket, Calendar } from 'lucide-react'
+import { usePhantom } from "@phantom/react-sdk"
+import { Ticket, Calendar, LogIn } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-export const Route = createFileRoute('/user/tickets/')({
-  component: UserTicketsPage,
+export const Route = createFileRoute('/tickets')({
+  component: TicketsPage,
 })
 
-function UserTicketsPage() {
+function TicketsPage() {
+  const { isConnected } = usePhantom()
+
+  if (!isConnected) {
+    return (
+      <div className="space-y-6">
+        <section className="space-y-2">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            My Tickets
+          </h1>
+          <p className="text-muted-foreground">
+            Log in to view your tickets
+          </p>
+        </section>
+
+        <Link
+          to="/login"
+          className={cn(
+            "flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3",
+            "text-base font-semibold text-primary-foreground",
+            "transition-all duration-200",
+            "hover:bg-primary/90 active:scale-[0.98]"
+          )}
+        >
+          <LogIn className="h-5 w-5" />
+          Login
+        </Link>
+      </div>
+    )
+  }
+
+  // Placeholder - no tickets yet
   return (
     <div className="space-y-6">
-      <Link 
-        to="/user" 
-        className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Profile
-      </Link>
-
       <section className="space-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">
           My Tickets
         </h1>
+        <p className="text-muted-foreground">
+          Your event tickets appear here
+        </p>
       </section>
 
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/50 px-6 py-16 text-center">
@@ -46,3 +73,4 @@ function UserTicketsPage() {
     </div>
   )
 }
+

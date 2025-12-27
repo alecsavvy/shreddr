@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UserRouteImport } from './routes/user'
+import { Route as TicketsRouteImport } from './routes/tickets'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DatingRouteImport } from './routes/dating'
 import { Route as AboutRouteImport } from './routes/about'
@@ -27,6 +28,11 @@ import { Route as EventsEventIdPurchaseFailureRouteImport } from './routes/event
 const UserRoute = UserRouteImport.update({
   id: '/user',
   path: '/user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TicketsRoute = TicketsRouteImport.update({
+  id: '/tickets',
+  path: '/tickets',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/dating': typeof DatingRoute
   '/login': typeof LoginRoute
+  '/tickets': typeof TicketsRoute
   '/user': typeof UserRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/user/settings': typeof UserSettingsRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/dating': typeof DatingRoute
   '/login': typeof LoginRoute
+  '/tickets': typeof TicketsRoute
   '/user': typeof UserRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/user/settings': typeof UserSettingsRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/dating': typeof DatingRoute
   '/login': typeof LoginRoute
+  '/tickets': typeof TicketsRoute
   '/user': typeof UserRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/user/settings': typeof UserSettingsRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dating'
     | '/login'
+    | '/tickets'
     | '/user'
     | '/auth/callback'
     | '/user/settings'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dating'
     | '/login'
+    | '/tickets'
     | '/user'
     | '/auth/callback'
     | '/user/settings'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dating'
     | '/login'
+    | '/tickets'
     | '/user'
     | '/auth/callback'
     | '/user/settings'
@@ -203,6 +215,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DatingRoute: typeof DatingRoute
   LoginRoute: typeof LoginRoute
+  TicketsRoute: typeof TicketsRoute
   UserRoute: typeof UserRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/user'
       fullPath: '/user'
       preLoaderRoute: typeof UserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tickets': {
+      id: '/tickets'
+      path: '/tickets'
+      fullPath: '/tickets'
+      preLoaderRoute: typeof TicketsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -334,6 +354,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   DatingRoute: DatingRoute,
   LoginRoute: LoginRoute,
+  TicketsRoute: TicketsRoute,
   UserRoute: UserRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
   EventsIndexRoute: EventsIndexRoute,

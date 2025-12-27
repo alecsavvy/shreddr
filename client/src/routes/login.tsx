@@ -1,6 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useModal, usePhantom } from "@phantom/react-sdk"
-import { useNavigate } from '@tanstack/react-router'
+import { useEffect } from 'react'
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -8,21 +8,16 @@ export const Route = createFileRoute('/login')({
 
 function LoginPage() {
   const { open } = useModal()
-  const { isConnected, user } = usePhantom()
+  const { isConnected } = usePhantom()
   const navigate = useNavigate()
 
-  if (isConnected) {
-    // Redirect to home if already connected
-    navigate({ to: '/' })
-    return null
-  }
+  useEffect(() => {
+    if (isConnected) {
+      navigate({ to: '/' })
+    } else {
+      open()
+    }
+  }, [isConnected, navigate, open])
 
-  return (
-    <div>
-      <h1>Login to Shreddr</h1>
-      <p>Connect your wallet to continue</p>
-      <button onClick={open}>Connect Wallet</button>
-    </div>
-  )
+  return null
 }
-
