@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import type { SignedTicket, TicketPayload } from '@/lib/types'
+import config from '@/config'
 
 interface TicketsContextType {
   tickets: SignedTicket[]
@@ -12,7 +13,7 @@ interface TicketsContextType {
 
 const TicketsContext = createContext<TicketsContextType | null>(null)
 
-const STORAGE_KEY = 'shreddr-tickets'
+const STORAGE_KEY = `${config.appName}-tickets`
 
 function loadTicketsFromStorage(): SignedTicket[] {
   try {

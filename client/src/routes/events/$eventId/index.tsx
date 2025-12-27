@@ -116,7 +116,13 @@ function EventDetailsPage() {
         className="max-w-sm"
       >
         <div className="flex flex-col items-center py-4">
-          <EventQR eventId={event.id} eventName={event.name} size={250} />
+          <EventQR 
+            eventId={event.id} 
+            eventName={event.name} 
+            eventDate={event.date}
+            eventVenue={event.venue}
+            size={250} 
+          />
           
           <div className="mt-6 text-center">
             <p className="font-semibold text-white">{event.name}</p>

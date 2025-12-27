@@ -8,9 +8,6 @@ import config from '@/config'
 import type { Event, SignedTicket } from '@/lib/types'
 import { useTickets, createTicketPayload } from '@/hooks/use-tickets'
 
-// Coinflow sandbox merchant ID - replace with your actual merchant ID from https://sandbox.coinflow.cash/
-const COINFLOW_MERCHANT_ID = 'shreddr'
-
 interface CoinflowCheckoutProps {
   event: Event
   onSuccess: (ticket: SignedTicket) => void
@@ -224,9 +221,9 @@ export function CoinflowCheckout({ event, onSuccess, onError, className }: Coinf
         <CoinflowPurchase
           wallet={wallet}
           connection={connection}
-          merchantId={COINFLOW_MERCHANT_ID}
-          env="sandbox"
-          blockchain="solana"
+          merchantId={config.coinflow.merchantId}
+          env={config.coinflow.env}
+          blockchain={config.coinflow.blockchain}
           onSuccess={handlePaymentSuccess}
           onError={handlePaymentError}
           handleHeightChange={handleHeightChange}

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
+import config from '@/config'
 
 type Theme = "dark" | "light" | "system"
 
@@ -19,7 +20,7 @@ const ThemeProviderContext = createContext<ThemeProviderState | undefined>(undef
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "shreddr-theme",
+  storageKey = `${config.appName}-theme`,
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== "undefined") {
