@@ -122,12 +122,12 @@ export function CoinflowCheckout({ event, onSuccess, onError, className, priceIn
     }
   }, [walletAddress, solana, event, addTicket, onSuccess, onError])
 
-  // Handle payment error
-  const handlePaymentError = useCallback((err: string) => {
-    setError(err)
-    setStep('error')
-    onError(err)
-  }, [onError])
+  // // Handle payment error
+  // const handlePaymentError = useCallback((err: string) => {
+  //   setError(err)
+  //   setStep('error')
+  //   onError(err)
+  // }, [onError])
 
   // Handle height changes from Coinflow iframe
   const handleHeightChange = useCallback((height: string) => {
@@ -230,13 +230,13 @@ export function CoinflowCheckout({ event, onSuccess, onError, className, priceIn
           env={config.coinflow.env}
           blockchain={config.coinflow.blockchain}
           onSuccess={handlePaymentSuccess}
-          onError={handlePaymentError}
+          //onError={handlePaymentError}
           handleHeightChange={handleHeightChange}
           subtotal={{ cents: priceInCents }}
           chargebackProtectionData={[
             {
               productName: event.name,
-              productType: 'event_ticket',
+              productType: 'musicTicket',
               quantity: 1,
             },
           ]}
