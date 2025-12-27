@@ -5,7 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:localnet": "vite --mode localnet",
+    "dev:testnet": "vite --mode testnet",
+    "dev:mainnet": "vite --mode mainnet",
     "build": "tsc -b && vite build",
+    "build:localnet": "tsc -b && vite build --mode localnet",
+    "build:testnet": "tsc -b && vite build --mode testnet",
+    "build:mainnet": "tsc -b && vite build --mode mainnet",
     "lint": "eslint .",
     "preview": "vite preview"
   },

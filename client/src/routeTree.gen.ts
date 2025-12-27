@@ -9,11 +9,36 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UserRouteImport } from './routes/user'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as DatingRouteImport } from './routes/dating'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as EventsIndexRouteImport } from './routes/events/index'
+import { Route as UserSettingsRouteImport } from './routes/user/settings'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as UserTicketsIndexRouteImport } from './routes/user/tickets/index'
+import { Route as EventsEventIdIndexRouteImport } from './routes/events/$eventId/index'
+import { Route as UserTicketsTicketIdRouteImport } from './routes/user/tickets/$ticketId'
+import { Route as EventsEventIdPurchaseIndexRouteImport } from './routes/events/$eventId/purchase/index'
+import { Route as EventsEventIdPurchaseSuccessRouteImport } from './routes/events/$eventId/purchase/success'
+import { Route as EventsEventIdPurchaseFailureRouteImport } from './routes/events/$eventId/purchase/failure'
 
+const UserRoute = UserRouteImport.update({
+  id: '/user',
+  path: '/user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DatingRoute = DatingRouteImport.update({
+  id: '/dating',
+  path: '/dating',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -24,53 +49,192 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
+const EventsIndexRoute = EventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const UserSettingsRoute = UserSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => UserRoute,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UserTicketsIndexRoute = UserTicketsIndexRouteImport.update({
+  id: '/tickets/',
+  path: '/tickets/',
+  getParentRoute: () => UserRoute,
+} as any)
+const EventsEventIdIndexRoute = EventsEventIdIndexRouteImport.update({
+  id: '/events/$eventId/',
+  path: '/events/$eventId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserTicketsTicketIdRoute = UserTicketsTicketIdRouteImport.update({
+  id: '/tickets/$ticketId',
+  path: '/tickets/$ticketId',
+  getParentRoute: () => UserRoute,
+} as any)
+const EventsEventIdPurchaseIndexRoute =
+  EventsEventIdPurchaseIndexRouteImport.update({
+    id: '/events/$eventId/purchase/',
+    path: '/events/$eventId/purchase/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EventsEventIdPurchaseSuccessRoute =
+  EventsEventIdPurchaseSuccessRouteImport.update({
+    id: '/events/$eventId/purchase/success',
+    path: '/events/$eventId/purchase/success',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EventsEventIdPurchaseFailureRoute =
+  EventsEventIdPurchaseFailureRouteImport.update({
+    id: '/events/$eventId/purchase/failure',
+    path: '/events/$eventId/purchase/failure',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/dating': typeof DatingRoute
+  '/login': typeof LoginRoute
+  '/user': typeof UserRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
-  '/auth/login': typeof AuthLoginRoute
+  '/user/settings': typeof UserSettingsRoute
+  '/events': typeof EventsIndexRoute
+  '/user/tickets/$ticketId': typeof UserTicketsTicketIdRoute
+  '/events/$eventId': typeof EventsEventIdIndexRoute
+  '/user/tickets': typeof UserTicketsIndexRoute
+  '/events/$eventId/purchase/failure': typeof EventsEventIdPurchaseFailureRoute
+  '/events/$eventId/purchase/success': typeof EventsEventIdPurchaseSuccessRoute
+  '/events/$eventId/purchase': typeof EventsEventIdPurchaseIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/dating': typeof DatingRoute
+  '/login': typeof LoginRoute
+  '/user': typeof UserRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
-  '/auth/login': typeof AuthLoginRoute
+  '/user/settings': typeof UserSettingsRoute
+  '/events': typeof EventsIndexRoute
+  '/user/tickets/$ticketId': typeof UserTicketsTicketIdRoute
+  '/events/$eventId': typeof EventsEventIdIndexRoute
+  '/user/tickets': typeof UserTicketsIndexRoute
+  '/events/$eventId/purchase/failure': typeof EventsEventIdPurchaseFailureRoute
+  '/events/$eventId/purchase/success': typeof EventsEventIdPurchaseSuccessRoute
+  '/events/$eventId/purchase': typeof EventsEventIdPurchaseIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/dating': typeof DatingRoute
+  '/login': typeof LoginRoute
+  '/user': typeof UserRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
-  '/auth/login': typeof AuthLoginRoute
+  '/user/settings': typeof UserSettingsRoute
+  '/events/': typeof EventsIndexRoute
+  '/user/tickets/$ticketId': typeof UserTicketsTicketIdRoute
+  '/events/$eventId/': typeof EventsEventIdIndexRoute
+  '/user/tickets/': typeof UserTicketsIndexRoute
+  '/events/$eventId/purchase/failure': typeof EventsEventIdPurchaseFailureRoute
+  '/events/$eventId/purchase/success': typeof EventsEventIdPurchaseSuccessRoute
+  '/events/$eventId/purchase/': typeof EventsEventIdPurchaseIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/auth/callback' | '/auth/login'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/dating'
+    | '/login'
+    | '/user'
+    | '/auth/callback'
+    | '/user/settings'
+    | '/events'
+    | '/user/tickets/$ticketId'
+    | '/events/$eventId'
+    | '/user/tickets'
+    | '/events/$eventId/purchase/failure'
+    | '/events/$eventId/purchase/success'
+    | '/events/$eventId/purchase'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/auth/callback' | '/auth/login'
-  id: '__root__' | '/' | '/about' | '/auth/callback' | '/auth/login'
+  to:
+    | '/'
+    | '/about'
+    | '/dating'
+    | '/login'
+    | '/user'
+    | '/auth/callback'
+    | '/user/settings'
+    | '/events'
+    | '/user/tickets/$ticketId'
+    | '/events/$eventId'
+    | '/user/tickets'
+    | '/events/$eventId/purchase/failure'
+    | '/events/$eventId/purchase/success'
+    | '/events/$eventId/purchase'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/dating'
+    | '/login'
+    | '/user'
+    | '/auth/callback'
+    | '/user/settings'
+    | '/events/'
+    | '/user/tickets/$ticketId'
+    | '/events/$eventId/'
+    | '/user/tickets/'
+    | '/events/$eventId/purchase/failure'
+    | '/events/$eventId/purchase/success'
+    | '/events/$eventId/purchase/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  DatingRoute: typeof DatingRoute
+  LoginRoute: typeof LoginRoute
+  UserRoute: typeof UserRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
-  AuthLoginRoute: typeof AuthLoginRoute
+  EventsIndexRoute: typeof EventsIndexRoute
+  EventsEventIdIndexRoute: typeof EventsEventIdIndexRoute
+  EventsEventIdPurchaseFailureRoute: typeof EventsEventIdPurchaseFailureRoute
+  EventsEventIdPurchaseSuccessRoute: typeof EventsEventIdPurchaseSuccessRoute
+  EventsEventIdPurchaseIndexRoute: typeof EventsEventIdPurchaseIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/user': {
+      id: '/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof UserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dating': {
+      id: '/dating'
+      path: '/dating'
+      fullPath: '/dating'
+      preLoaderRoute: typeof DatingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -85,12 +249,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
+    '/events/': {
+      id: '/events/'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/user/settings': {
+      id: '/user/settings'
+      path: '/settings'
+      fullPath: '/user/settings'
+      preLoaderRoute: typeof UserSettingsRouteImport
+      parentRoute: typeof UserRoute
     }
     '/auth/callback': {
       id: '/auth/callback'
@@ -99,14 +270,77 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/user/tickets/': {
+      id: '/user/tickets/'
+      path: '/tickets'
+      fullPath: '/user/tickets'
+      preLoaderRoute: typeof UserTicketsIndexRouteImport
+      parentRoute: typeof UserRoute
+    }
+    '/events/$eventId/': {
+      id: '/events/$eventId/'
+      path: '/events/$eventId'
+      fullPath: '/events/$eventId'
+      preLoaderRoute: typeof EventsEventIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user/tickets/$ticketId': {
+      id: '/user/tickets/$ticketId'
+      path: '/tickets/$ticketId'
+      fullPath: '/user/tickets/$ticketId'
+      preLoaderRoute: typeof UserTicketsTicketIdRouteImport
+      parentRoute: typeof UserRoute
+    }
+    '/events/$eventId/purchase/': {
+      id: '/events/$eventId/purchase/'
+      path: '/events/$eventId/purchase'
+      fullPath: '/events/$eventId/purchase'
+      preLoaderRoute: typeof EventsEventIdPurchaseIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/$eventId/purchase/success': {
+      id: '/events/$eventId/purchase/success'
+      path: '/events/$eventId/purchase/success'
+      fullPath: '/events/$eventId/purchase/success'
+      preLoaderRoute: typeof EventsEventIdPurchaseSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/$eventId/purchase/failure': {
+      id: '/events/$eventId/purchase/failure'
+      path: '/events/$eventId/purchase/failure'
+      fullPath: '/events/$eventId/purchase/failure'
+      preLoaderRoute: typeof EventsEventIdPurchaseFailureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
+
+interface UserRouteChildren {
+  UserSettingsRoute: typeof UserSettingsRoute
+  UserTicketsTicketIdRoute: typeof UserTicketsTicketIdRoute
+  UserTicketsIndexRoute: typeof UserTicketsIndexRoute
+}
+
+const UserRouteChildren: UserRouteChildren = {
+  UserSettingsRoute: UserSettingsRoute,
+  UserTicketsTicketIdRoute: UserTicketsTicketIdRoute,
+  UserTicketsIndexRoute: UserTicketsIndexRoute,
+}
+
+const UserRouteWithChildren = UserRoute._addFileChildren(UserRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  DatingRoute: DatingRoute,
+  LoginRoute: LoginRoute,
+  UserRoute: UserRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
-  AuthLoginRoute: AuthLoginRoute,
+  EventsIndexRoute: EventsIndexRoute,
+  EventsEventIdIndexRoute: EventsEventIdIndexRoute,
+  EventsEventIdPurchaseFailureRoute: EventsEventIdPurchaseFailureRoute,
+  EventsEventIdPurchaseSuccessRoute: EventsEventIdPurchaseSuccessRoute,
+  EventsEventIdPurchaseIndexRoute: EventsEventIdPurchaseIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
