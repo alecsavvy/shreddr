@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Ticket, CalendarDays, MapPin, QrCode } from 'lucide-react'
+import { ArrowLeft, Ticket, CalendarDays, MapPin, QrCode, Check } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { getEventById, formatEventDate, formatPrice } from '@/lib/events-data'
 import { EventQR } from '@/components/event-qr'
 import { Modal } from '@/components/modal'
+import { useTickets } from '@/hooks/use-tickets'
 
 export const Route = createFileRoute('/events/$eventId/')({
   component: EventDetailsPage,
@@ -14,6 +15,12 @@ function EventDetailsPage() {
   const { eventId } = Route.useParams()
   const event = getEventById(eventId)
   const [showQR, setShowQR] = useState(false)
+  const { getTicketsForEvent } = useTickets()
+  
+  // Check if user already has a ticket for this event
+  const userTickets = getTicketsForEvent(eventId)
+  const hasTicket = userTickets.length > 0
+  const firstTicket = userTickets[0]
 
   if (!event) {
     return (
@@ -68,16 +75,54 @@ function EventDetailsPage() {
         </p>
       </div>
 
-      {/* Price Card */}
-      <div className="rounded-xl border border-primary/30 bg-primary/5 p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground">Ticket Price</p>
-            <p className="text-2xl font-bold text-primary">{formatPrice(event.price)}</p>
+      {/* Ticket Action Card */}
+      {hasTicket ? (
+        <Link
+          to="/user/tickets/$ticketId"
+          params={{ ticketId: firstTicket.payload.ticketId }}
+          className={cn(
+            "block rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4",
+            "transition-all duration-200",
+            "hover:border-emerald-500/50 hover:bg-emerald-500/15 active:scale-[0.98]"
+          )}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="flex items-center gap-1.5 text-sm font-medium text-emerald-400">
+                <Check className="h-4 w-4" />
+                You're going!
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Tap to view your ticket
+              </p>
+            </div>
+            <Ticket className="h-8 w-8 text-emerald-500/50" />
           </div>
-          <Ticket className="h-8 w-8 text-primary/50" />
-        </div>
-      </div>
+        </Link>
+      ) : (
+        <Link
+          to="/events/$eventId/purchase"
+          params={{ eventId }}
+          className={cn(
+            "group block rounded-xl border border-primary/30 bg-primary/5 p-4",
+            "transition-all duration-200",
+            "hover:border-primary/50 hover:bg-primary/10 active:scale-[0.98]"
+          )}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Ticket Price</p>
+              <p className="text-2xl font-bold text-primary">{formatPrice(event.price)}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-primary opacity-70 transition-opacity group-hover:opacity-100">
+                Purchase
+              </span>
+              <Ticket className="h-8 w-8 text-primary/50" />
+            </div>
+          </div>
+        </Link>
+      )}
 
       {/* QR Code Button */}
       <button
@@ -92,21 +137,6 @@ function EventDetailsPage() {
         <QrCode className="h-4 w-4" />
         Share Event QR
       </button>
-
-      {/* Purchase Button */}
-      <Link
-        to="/events/$eventId/purchase"
-        params={{ eventId }}
-        className={cn(
-          "flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3",
-          "text-base font-semibold text-primary-foreground",
-          "transition-all duration-200",
-          "hover:bg-primary/90 active:scale-[0.98]"
-        )}
-      >
-        <Ticket className="h-5 w-5" />
-        Purchase Ticket
-      </Link>
 
       {/* QR Code Modal */}
       <Modal

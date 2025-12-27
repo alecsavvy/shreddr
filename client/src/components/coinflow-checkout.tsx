@@ -13,6 +13,8 @@ interface CoinflowCheckoutProps {
   onSuccess: (ticket: SignedTicket) => void
   onError: (error: string) => void
   className?: string
+  /** Price in cents to charge */
+  priceInCents: number
 }
 
 type CheckoutStep = 'payment' | 'signing' | 'complete' | 'error'
@@ -53,12 +55,12 @@ function usePhantomSolanaWallet() {
   return { wallet, walletAddress, isConnected, isAvailable, solana }
 }
 
-export function CoinflowCheckout({ event, onSuccess, onError, className }: CoinflowCheckoutProps) {
+export function CoinflowCheckout({ event, onSuccess, onError, className, priceInCents }: CoinflowCheckoutProps) {
   const { wallet, walletAddress, isConnected, isAvailable, solana } = usePhantomSolanaWallet()
   const { addTicket } = useTickets()
   const [step, setStep] = useState<CheckoutStep>('payment')
   const [error, setError] = useState<string | null>(null)
-  const [iframeHeight, setIframeHeight] = useState('500px')
+  const [iframeHeight, setIframeHeight] = useState('auto')
 
   // Create Solana connection
   const connection = useMemo(() => {
@@ -198,8 +200,8 @@ export function CoinflowCheckout({ event, onSuccess, onError, className }: Coinf
 
   // Payment step - show Coinflow checkout
   return (
-    <div className={cn('overflow-hidden rounded-xl border border-border', className)}>
-      <div className="border-b border-border bg-card px-4 py-3">
+    <div className={cn('flex flex-col rounded-xl border border-border', className)}>
+      <div className="shrink-0 border-b border-border bg-card px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <CreditCard className="h-5 w-5 text-primary" />
@@ -217,7 +219,10 @@ export function CoinflowCheckout({ event, onSuccess, onError, className }: Coinf
         </div>
       </div>
       
-      <div className="bg-white" style={{ minHeight: iframeHeight }}>
+      <div 
+        className="min-h-0 flex-1 overflow-hidden rounded-b-xl [&>iframe]:!bg-transparent [&>iframe]:!h-full"
+        style={{ height: iframeHeight === 'auto' ? undefined : iframeHeight }}
+      >
         <CoinflowPurchase
           wallet={wallet}
           connection={connection}
@@ -227,6 +232,7 @@ export function CoinflowCheckout({ event, onSuccess, onError, className }: Coinf
           onSuccess={handlePaymentSuccess}
           onError={handlePaymentError}
           handleHeightChange={handleHeightChange}
+          subtotal={{ cents: priceInCents }}
           chargebackProtectionData={[
             {
               productName: event.name,

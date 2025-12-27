@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useCallback } from 'react'
 import { ArrowLeft, CalendarDays, MapPin, Wallet, ExternalLink, QrCode, Download, CalendarPlus } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
 import { cn } from '@/lib/utils'
 import { useTickets } from '@/hooks/use-tickets'
 import { getEventById, formatEventDate } from '@/lib/events-data'
@@ -41,28 +42,35 @@ async function saveTicketImage({ svg, ticketId, eventName, eventDate, venue }: T
       canvas.width = cardWidth
       canvas.height = cardHeight
 
-      // Background gradient
-      const gradient = ctx.createLinearGradient(0, 0, cardWidth, cardHeight)
-      gradient.addColorStop(0, '#1a1a2e')
-      gradient.addColorStop(1, '#16213e')
-      ctx.fillStyle = gradient
+      // Solid black background
+      ctx.fillStyle = '#000000'
       ctx.fillRect(0, 0, cardWidth, cardHeight)
 
-      // Add subtle pattern
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'
-      for (let i = 0; i < cardWidth; i += 20) {
-        for (let j = 0; j < cardHeight; j += 20) {
-          if ((i + j) % 40 === 0) {
-            ctx.fillRect(i, j, 10, 10)
-          }
-        }
-      }
-
-      // App branding
-      ctx.fillStyle = '#ffffff'
-      ctx.font = 'bold 24px system-ui, -apple-system, sans-serif'
+      // App branding: SHREDDR.live
       ctx.textAlign = 'center'
-      ctx.fillText(config.appName.toUpperCase(), cardWidth / 2, 50)
+      ctx.fillStyle = '#ffffff'
+      ctx.font = 'bold 28px system-ui, -apple-system, sans-serif'
+      const mainText = 'SHREDDR'
+      const suffixText = '.live'
+      const mainWidth = ctx.measureText(mainText).width
+      ctx.font = '18px system-ui, -apple-system, sans-serif'
+      const suffixWidth = ctx.measureText(suffixText).width
+      const totalWidth = mainWidth + suffixWidth
+      const startX = (cardWidth - totalWidth) / 2
+      
+      // Draw main text
+      ctx.font = 'bold 28px system-ui, -apple-system, sans-serif'
+      ctx.fillStyle = '#ffffff'
+      ctx.textAlign = 'left'
+      ctx.fillText(mainText, startX, 50)
+      
+      // Draw suffix (smaller, slightly dimmer)
+      ctx.font = '18px system-ui, -apple-system, sans-serif'
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+      ctx.fillText(suffixText, startX + mainWidth, 50)
+      
+      // Reset alignment
+      ctx.textAlign = 'center'
 
       // "YOUR TICKET" label
       ctx.font = '14px system-ui, -apple-system, sans-serif'
@@ -149,14 +157,15 @@ async function saveTicketImage({ svg, ticketId, eventName, eventDate, venue }: T
               text: 'Your event ticket',
               files: [file],
             })
-            resolve()
-            return
           } catch (e) {
-            // User cancelled or share failed, fall through to download
+            // User cancelled or share failed - don't fall through to download
+            console.log('Share cancelled or failed:', e)
           }
+          resolve()
+          return
         }
 
-        // Fallback: download the image
+        // Fallback: download the image (only if share API not available)
         const link = document.createElement('a')
         link.download = `${eventName.replace(/\s+/g, '-').toLowerCase()}-ticket.png`
         link.href = URL.createObjectURL(blob)
@@ -220,28 +229,22 @@ function TicketDetailsPage() {
   
   const ticket = getTicket(ticketId)
   const event = ticket ? getEventById(ticket.payload.eventId) : undefined
+  
+  // Generate QR data for the ticket (used by hidden QR for image generation)
+  const ticketQRData = ticket ? JSON.stringify({
+    payload: ticket.payload,
+    signature: ticket.signature,
+    publicKey: ticket.publicKey,
+  }) : ''
 
   // Save QR code as styled image
   const handleSaveToPhotos = useCallback(async () => {
     if (!ticket || !event) return
     
-    // Find the QR code SVG in the modal
-    const svg = document.querySelector('.qr-code-container svg') as SVGElement
-    if (!svg) {
-      // If modal isn't open, show it first
-      setShowQR(true)
-      setTimeout(async () => {
-        const svgRetry = document.querySelector('.qr-code-container svg') as SVGElement
-        if (svgRetry) await saveTicketImage({
-          svg: svgRetry,
-          ticketId: ticket.payload.ticketId,
-          eventName: event.name,
-          eventDate: event.date,
-          venue: event.venue,
-        })
-      }, 100)
-      return
-    }
+    // Grab the hidden QR SVG (always rendered off-screen)
+    const svg = document.querySelector('.hidden-qr-container svg') as SVGElement
+    if (!svg) return
+    
     await saveTicketImage({
       svg,
       ticketId: ticket.payload.ticketId,
@@ -499,6 +502,18 @@ function TicketDetailsPage() {
         </Link>
       )}
 
+      {/* Hidden QR for image generation (not visible to user) */}
+      <div className="hidden-qr-container sr-only absolute -left-[9999px]" aria-hidden="true">
+        <QRCodeSVG
+          value={ticketQRData}
+          size={300}
+          level="M"
+          includeMargin={false}
+          bgColor="#ffffff"
+          fgColor="#000000"
+        />
+      </div>
+
       {/* QR Code Modal */}
       <Modal
         isOpen={showQR}
@@ -506,9 +521,7 @@ function TicketDetailsPage() {
         className="max-w-sm"
       >
         <div className="flex flex-col items-center py-4">
-          <div className="qr-code-container">
-            <TicketQR ticket={ticket} size={280} />
-          </div>
+          <TicketQR ticket={ticket} size={280} />
           
           {event && (
             <div className="mt-6 text-center">

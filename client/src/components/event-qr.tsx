@@ -1,7 +1,6 @@
 import { QRCodeSVG } from 'qrcode.react'
 import { Share2, Download, Image } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import config from '@/config'
 
 interface EventQRProps {
   eventId: string
@@ -84,28 +83,35 @@ export function EventQR({ eventId, eventName, eventDate, eventVenue, size = 200,
       canvas.width = cardWidth
       canvas.height = cardHeight
 
-      // Background gradient
-      const gradient = ctx.createLinearGradient(0, 0, cardWidth, cardHeight)
-      gradient.addColorStop(0, '#1a1a2e')
-      gradient.addColorStop(1, '#16213e')
-      ctx.fillStyle = gradient
+      // Solid black background
+      ctx.fillStyle = '#000000'
       ctx.fillRect(0, 0, cardWidth, cardHeight)
 
-      // Add subtle pattern
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'
-      for (let i = 0; i < cardWidth; i += 20) {
-        for (let j = 0; j < cardHeight; j += 20) {
-          if ((i + j) % 40 === 0) {
-            ctx.fillRect(i, j, 10, 10)
-          }
-        }
-      }
-
-      // App branding
-      ctx.fillStyle = '#ffffff'
-      ctx.font = 'bold 24px system-ui, -apple-system, sans-serif'
+      // App branding: SHREDDR.live
       ctx.textAlign = 'center'
-      ctx.fillText(config.appName.toUpperCase(), cardWidth / 2, 50)
+      ctx.fillStyle = '#ffffff'
+      ctx.font = 'bold 28px system-ui, -apple-system, sans-serif'
+      const mainText = 'SHREDDR'
+      const suffixText = '.live'
+      const mainWidth = ctx.measureText(mainText).width
+      ctx.font = '18px system-ui, -apple-system, sans-serif'
+      const suffixWidth = ctx.measureText(suffixText).width
+      const totalWidth = mainWidth + suffixWidth
+      const startX = (cardWidth - totalWidth) / 2
+      
+      // Draw main text
+      ctx.font = 'bold 28px system-ui, -apple-system, sans-serif'
+      ctx.fillStyle = '#ffffff'
+      ctx.textAlign = 'left'
+      ctx.fillText(mainText, startX, 50)
+      
+      // Draw suffix (smaller, slightly dimmer)
+      ctx.font = '18px system-ui, -apple-system, sans-serif'
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+      ctx.fillText(suffixText, startX + mainWidth, 50)
+      
+      // Reset alignment for rest
+      ctx.textAlign = 'center'
 
       // Event name
       ctx.font = 'bold 36px system-ui, -apple-system, sans-serif'
@@ -190,13 +196,14 @@ export function EventQR({ eventId, eventName, eventDate, eventVenue, size = 200,
               text: `Check out ${eventName}!`,
               files: [file],
             })
-            return
           } catch (error) {
+            // User cancelled or share failed - don't fall through to download
             console.log('Share cancelled or failed:', error)
           }
+          return
         }
 
-        // Fallback: download the image
+        // Fallback: download the image (only if share API not available)
         const link = document.createElement('a')
         link.download = `${eventName.replace(/\s+/g, '-').toLowerCase()}-share.png`
         link.href = URL.createObjectURL(blob)

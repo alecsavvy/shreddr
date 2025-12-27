@@ -164,11 +164,13 @@ function PurchasePage() {
         onClose={closeModal}
         title="Secure Checkout"
       >
-        <div className="mx-auto max-w-lg p-4">
+        <div className="mx-auto flex h-full w-full max-w-2xl flex-col p-4">
           <CoinflowCheckout
             event={event}
+            priceInCents={event.price}
             onSuccess={handleSuccess}
             onError={handleError}
+            className="flex-1"
           />
         </div>
       </FullScreenModal>
