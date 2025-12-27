@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as DatingRouteImport } from './routes/dating'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserIndexRouteImport } from './routes/user/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as UserSettingsRouteImport } from './routes/user/settings'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
@@ -54,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const UserIndexRoute = UserIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UserRoute,
 } as any)
 const EventsIndexRoute = EventsIndexRouteImport.update({
   id: '/events/',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/auth/callback': typeof AuthCallbackRoute
   '/user/settings': typeof UserSettingsRoute
   '/events': typeof EventsIndexRoute
+  '/user/': typeof UserIndexRoute
   '/user/tickets/$ticketId': typeof UserTicketsTicketIdRoute
   '/events/$eventId': typeof EventsEventIdIndexRoute
   '/user/tickets': typeof UserTicketsIndexRoute
@@ -127,10 +134,10 @@ export interface FileRoutesByTo {
   '/dating': typeof DatingRoute
   '/login': typeof LoginRoute
   '/tickets': typeof TicketsRoute
-  '/user': typeof UserRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/user/settings': typeof UserSettingsRoute
   '/events': typeof EventsIndexRoute
+  '/user': typeof UserIndexRoute
   '/user/tickets/$ticketId': typeof UserTicketsTicketIdRoute
   '/events/$eventId': typeof EventsEventIdIndexRoute
   '/user/tickets': typeof UserTicketsIndexRoute
@@ -149,6 +156,7 @@ export interface FileRoutesById {
   '/auth/callback': typeof AuthCallbackRoute
   '/user/settings': typeof UserSettingsRoute
   '/events/': typeof EventsIndexRoute
+  '/user/': typeof UserIndexRoute
   '/user/tickets/$ticketId': typeof UserTicketsTicketIdRoute
   '/events/$eventId/': typeof EventsEventIdIndexRoute
   '/user/tickets/': typeof UserTicketsIndexRoute
@@ -168,6 +176,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/user/settings'
     | '/events'
+    | '/user/'
     | '/user/tickets/$ticketId'
     | '/events/$eventId'
     | '/user/tickets'
@@ -181,10 +190,10 @@ export interface FileRouteTypes {
     | '/dating'
     | '/login'
     | '/tickets'
-    | '/user'
     | '/auth/callback'
     | '/user/settings'
     | '/events'
+    | '/user'
     | '/user/tickets/$ticketId'
     | '/events/$eventId'
     | '/user/tickets'
@@ -202,6 +211,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/user/settings'
     | '/events/'
+    | '/user/'
     | '/user/tickets/$ticketId'
     | '/events/$eventId/'
     | '/user/tickets/'
@@ -268,6 +278,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/user/': {
+      id: '/user/'
+      path: '/'
+      fullPath: '/user/'
+      preLoaderRoute: typeof UserIndexRouteImport
+      parentRoute: typeof UserRoute
     }
     '/events/': {
       id: '/events/'
@@ -337,12 +354,14 @@ declare module '@tanstack/react-router' {
 
 interface UserRouteChildren {
   UserSettingsRoute: typeof UserSettingsRoute
+  UserIndexRoute: typeof UserIndexRoute
   UserTicketsTicketIdRoute: typeof UserTicketsTicketIdRoute
   UserTicketsIndexRoute: typeof UserTicketsIndexRoute
 }
 
 const UserRouteChildren: UserRouteChildren = {
   UserSettingsRoute: UserSettingsRoute,
+  UserIndexRoute: UserIndexRoute,
   UserTicketsTicketIdRoute: UserTicketsTicketIdRoute,
   UserTicketsIndexRoute: UserTicketsIndexRoute,
 }

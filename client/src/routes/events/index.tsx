@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { CalendarDays, ChevronRight } from 'lucide-react'
+import { CalendarDays, ChevronRight, MapPin } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { events, formatShortDate, formatPrice } from '@/lib/events-data'
 
 export const Route = createFileRoute('/events/')({
   component: EventsPage,
@@ -9,11 +10,15 @@ export const Route = createFileRoute('/events/')({
 function EventCard({ 
   id, 
   name, 
-  date 
+  date,
+  venue,
+  price,
 }: { 
   id: string
   name: string
   date: string
+  venue: string
+  price: number
 }) {
   return (
     <Link
@@ -26,18 +31,22 @@ function EventCard({
         "active:scale-[0.98]"
       )}
     >
-      <div className="min-w-0 flex-1 space-y-1">
+      <div className="min-w-0 flex-1 space-y-2">
         <h3 className="truncate font-semibold text-card-foreground group-hover:text-primary">
           {name}
         </h3>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CalendarDays className="h-4 w-4 shrink-0" />
-          <span>{new Date(date).toLocaleDateString('en-US', { 
-            weekday: 'short',
-            month: 'short', 
-            day: 'numeric',
-            year: 'numeric'
-          })}</span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <CalendarDays className="h-4 w-4 shrink-0" />
+            <span>{formatShortDate(date)}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4 shrink-0" />
+            <span className="truncate">{venue}</span>
+          </div>
+        </div>
+        <div className="text-sm font-semibold text-primary">
+          {formatPrice(price)}
         </div>
       </div>
       <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
@@ -46,13 +55,6 @@ function EventCard({
 }
 
 function EventsPage() {
-  // Placeholder events data
-  const events = [
-    { id: '1', name: 'Summer Music Festival', date: '2025-07-15' },
-    { id: '2', name: 'Tech Conference 2025', date: '2025-08-20' },
-    { id: '3', name: 'Art Gallery Opening', date: '2025-06-10' },
-  ]
-
   return (
     <div className="space-y-6">
       <section className="space-y-1">

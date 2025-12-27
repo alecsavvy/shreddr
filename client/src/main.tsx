@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { PhantomProvider, darkTheme, AddressType } from "@phantom/react-sdk"
 import { ThemeProvider } from '@/hooks/use-theme'
+import { TicketsProvider } from '@/hooks/use-tickets'
 
 import './index.css'
 
@@ -39,7 +40,9 @@ if (!rootElement.innerHTML) {
           appIcon=""
           appName="shreddr"
         >
-          <RouterProvider router={router} />
+          <TicketsProvider>
+            <RouterProvider router={router} />
+          </TicketsProvider>
         </PhantomProvider>
       </ThemeProvider>
     </StrictMode>,

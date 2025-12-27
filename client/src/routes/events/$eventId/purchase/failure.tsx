@@ -1,13 +1,17 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { XCircle, RefreshCw, ArrowRight } from 'lucide-react'
+import { XCircle, ArrowLeft, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/events/$eventId/purchase/failure')({
   component: PurchaseFailurePage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    error: search.error as string | undefined,
+  }),
 })
 
 function PurchaseFailurePage() {
   const { eventId } = Route.useParams()
+  const { error } = Route.useSearch()
 
   return (
     <div className="space-y-8 py-6">
@@ -19,7 +23,13 @@ function PurchaseFailurePage() {
           Purchase Failed
         </h1>
         <p className="mt-2 text-muted-foreground">
-          There was an issue processing your payment.
+          {error || "Something went wrong with your purchase"}
+        </p>
+      </div>
+
+      <div className="rounded-xl border border-border bg-card p-6">
+        <p className="text-center text-sm text-muted-foreground">
+          Don't worry, you haven't been charged. Please try again or contact support if the problem persists.
         </p>
       </div>
 
@@ -47,8 +57,8 @@ function PurchaseFailurePage() {
             "hover:bg-secondary/80 active:scale-[0.98]"
           )}
         >
+          <ArrowLeft className="h-5 w-5" />
           Back to Event
-          <ArrowRight className="h-5 w-5" />
         </Link>
       </div>
     </div>
