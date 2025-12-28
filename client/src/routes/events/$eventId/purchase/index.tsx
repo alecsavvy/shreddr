@@ -1,25 +1,17 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, Ticket, CreditCard, Zap } from 'lucide-react'
-import { useState } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ArrowLeft, Ticket, CreditCard } from 'lucide-react'
 import { usePhantom } from '@phantom/react-sdk'
 import { cn } from '@/lib/utils'
 import { getEventById, formatEventDate, formatPrice } from '@/lib/events-data'
-import { CoinflowCheckout, SimulatedCheckout } from '@/components/coinflow-checkout'
-import { FullScreenModal } from '@/components/modal'
-import type { SignedTicket } from '@/lib/types'
 
 export const Route = createFileRoute('/events/$eventId/purchase/')({
   component: PurchasePage,
 })
 
-type CheckoutMode = 'select' | 'coinflow' | 'simulated'
-
 function PurchasePage() {
   const { eventId } = Route.useParams()
   const event = getEventById(eventId)
-  const navigate = useNavigate()
   const { isConnected } = usePhantom()
-  const [mode, setMode] = useState<CheckoutMode>('select')
 
   if (!event) {
     return (
@@ -38,26 +30,6 @@ function PurchasePage() {
       </div>
     )
   }
-
-  const handleSuccess = (ticket: SignedTicket) => {
-    setMode('select')
-    navigate({
-      to: '/events/$eventId/purchase/success',
-      params: { eventId },
-      search: { ticketId: ticket.payload.ticketId },
-    })
-  }
-
-  const handleError = (error: string) => {
-    setMode('select')
-    navigate({
-      to: '/events/$eventId/purchase/failure',
-      params: { eventId },
-      search: { error },
-    })
-  }
-
-  const closeModal = () => setMode('select')
 
   return (
     <div className="space-y-6">
@@ -118,10 +90,9 @@ function PurchasePage() {
         </div>
       ) : (
         <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">Select payment method:</p>
-          
-          <button
-            onClick={() => setMode('coinflow')}
+          <Link
+            to="/events/$eventId/purchase/payment"
+            params={{ eventId }}
             className={cn(
               "flex w-full items-center gap-4 rounded-xl border border-border bg-card p-4",
               "transition-all duration-200",
@@ -134,61 +105,11 @@ function PurchasePage() {
             </div>
             <div className="flex-1 text-left">
               <p className="font-semibold text-foreground">Credit Card</p>
-              <p className="text-sm text-muted-foreground">Pay with Coinflow (Sandbox)</p>
+              <p className="text-sm text-muted-foreground">Pay with Coinflow</p>
             </div>
-          </button>
-
-          <button
-            onClick={() => setMode('simulated')}
-            className={cn(
-              "flex w-full items-center gap-4 rounded-xl border border-dashed border-border bg-card/50 p-4",
-              "transition-all duration-200",
-              "hover:border-primary/50 hover:bg-card/80",
-              "active:scale-[0.98]"
-            )}
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-secondary">
-              <Zap className="h-6 w-6 text-muted-foreground" />
-            </div>
-            <div className="flex-1 text-left">
-              <p className="font-semibold text-foreground">Quick Test</p>
-              <p className="text-sm text-muted-foreground">Skip payment, go to signing</p>
-            </div>
-          </button>
+          </Link>
         </div>
       )}
-
-      {/* Coinflow Modal */}
-      <FullScreenModal
-        isOpen={mode === 'coinflow'}
-        onClose={closeModal}
-        title="Secure Checkout"
-      >
-        <div className="mx-auto flex h-full w-full max-w-2xl flex-col p-4">
-          <CoinflowCheckout
-            event={event}
-            priceInCents={event.price}
-            onSuccess={handleSuccess}
-            onError={handleError}
-            className="flex-1"
-          />
-        </div>
-      </FullScreenModal>
-
-      {/* Simulated Checkout Modal */}
-      <FullScreenModal
-        isOpen={mode === 'simulated'}
-        onClose={closeModal}
-        title="Quick Test Checkout"
-      >
-        <div className="mx-auto max-w-lg p-4">
-          <SimulatedCheckout
-            event={event}
-            onSuccess={handleSuccess}
-            onError={handleError}
-          />
-        </div>
-      </FullScreenModal>
     </div>
   )
 }

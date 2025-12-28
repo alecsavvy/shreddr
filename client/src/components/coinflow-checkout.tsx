@@ -60,7 +60,6 @@ export function CoinflowCheckout({ event, onSuccess, onError, className, priceIn
   const { addTicket } = useTickets()
   const [step, setStep] = useState<CheckoutStep>('payment')
   const [error, setError] = useState<string | null>(null)
-  const [iframeHeight, setIframeHeight] = useState('auto')
 
   // Create Solana connection
   const connection = useMemo(() => {
@@ -129,11 +128,6 @@ export function CoinflowCheckout({ event, onSuccess, onError, className, priceIn
   //   onError(err)
   // }, [onError])
 
-  // Handle height changes from Coinflow iframe
-  const handleHeightChange = useCallback((height: string) => {
-    setIframeHeight(height)
-  }, [])
-
   // Check if we have a connected wallet
   if (!isConnected || !isAvailable || !wallet || !walletAddress) {
     return (
@@ -200,7 +194,7 @@ export function CoinflowCheckout({ event, onSuccess, onError, className, priceIn
 
   // Payment step - show Coinflow checkout
   return (
-    <div className={cn('flex flex-col rounded-xl border border-border', className)}>
+    <div className={cn('flex flex-col overflow-hidden rounded-xl border border-border', className)}>
       <div className="shrink-0 border-b border-border bg-card px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -219,10 +213,7 @@ export function CoinflowCheckout({ event, onSuccess, onError, className, priceIn
         </div>
       </div>
       
-      <div 
-        className="min-h-0 flex-1 overflow-hidden rounded-b-xl [&>iframe]:!bg-transparent [&>iframe]:!h-full"
-        style={{ height: iframeHeight === 'auto' ? undefined : iframeHeight }}
-      >
+      <div className="min-h-0 flex-1 overflow-auto rounded-b-xl [&>iframe]:!h-full [&>iframe]:!min-h-full [&>iframe]:!w-full">
         <CoinflowPurchase
           wallet={wallet}
           connection={connection}
@@ -230,8 +221,6 @@ export function CoinflowCheckout({ event, onSuccess, onError, className, priceIn
           env={config.coinflow.env}
           blockchain={config.coinflow.blockchain}
           onSuccess={handlePaymentSuccess}
-          //onError={handlePaymentError}
-          handleHeightChange={handleHeightChange}
           subtotal={{ cents: priceInCents }}
           chargebackProtectionData={[
             {
@@ -246,138 +235,3 @@ export function CoinflowCheckout({ event, onSuccess, onError, className, priceIn
   )
 }
 
-interface SimulatedCheckoutProps {
-  event: Event
-  onSuccess: (ticket: SignedTicket) => void
-  onError: (error: string) => void
-  className?: string
-}
-
-/**
- * Simulated checkout for development/testing
- * Skips Coinflow and goes directly to signing
- */
-export function SimulatedCheckout({ event, onSuccess, onError, className }: SimulatedCheckoutProps) {
-  const { isConnected } = usePhantom()
-  const { solana, isAvailable } = useSolana()
-  const { addTicket } = useTickets()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const walletAddress = solana?.publicKey || ''
-
-  const handlePurchase = async () => {
-    if (!walletAddress || !solana) {
-      setError('Wallet not connected')
-      onError('Wallet not connected')
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      // Create ticket payload
-      const payload = createTicketPayload(
-        event.id,
-        event.name,
-        event.date,
-        walletAddress
-      )
-
-      // Sign the ticket payload with Phantom
-      const message = JSON.stringify(payload)
-      const encodedMessage = new TextEncoder().encode(message)
-      
-      const signResult = await solana.signMessage(encodedMessage)
-      
-      if (!signResult || !signResult.signature) {
-        throw new Error('Failed to sign ticket')
-      }
-
-      // Convert signature to base64
-      const signatureBase64 = btoa(String.fromCharCode(...signResult.signature))
-
-      // Create signed ticket
-      const signedTicket: SignedTicket = {
-        payload,
-        signature: signatureBase64,
-        publicKey: walletAddress,
-        redeemed: false,
-      }
-
-      // Add to local storage
-      addTicket(signedTicket)
-
-      onSuccess(signedTicket)
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create ticket'
-      setError(errorMessage)
-      onError(errorMessage)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Check if we have a connected wallet
-  if (!isConnected || !isAvailable || !walletAddress) {
-    return (
-      <div className={cn('rounded-xl border border-border bg-card p-6', className)}>
-        <div className="flex flex-col items-center gap-4 text-center">
-          <AlertCircle className="h-10 w-10 text-muted-foreground" />
-          <div>
-            <p className="font-medium text-foreground">
-              {!isConnected ? 'Please connect your wallet to purchase tickets' : 
-               !isAvailable ? 'Solana wallet not available' :
-               'Wallet not ready'}
-            </p>
-            {isConnected && !walletAddress && (
-              <p className="mt-2 text-sm text-muted-foreground">
-                Your wallet is connected but no Solana address is available yet. 
-                Please try refreshing the page.
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className={cn('space-y-4', className)}>
-      {error && (
-        <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
-          {error}
-        </div>
-      )}
-      
-      <button
-        onClick={handlePurchase}
-        disabled={loading}
-        className={cn(
-          'flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3',
-          'text-base font-semibold text-primary-foreground',
-          'transition-all duration-200',
-          'hover:bg-primary/90 active:scale-[0.98]',
-          'disabled:opacity-50 disabled:cursor-not-allowed'
-        )}
-      >
-        {loading ? (
-          <>
-            <Loader2 className="h-5 w-5 animate-spin" />
-            Signing Ticket...
-          </>
-        ) : (
-          <>
-            <CreditCard className="h-5 w-5" />
-            Purchase Ticket (Simulated)
-          </>
-        )}
-      </button>
-      
-      <p className="text-center text-xs text-muted-foreground">
-        This simulates a successful payment and proceeds to ticket signing
-      </p>
-    </div>
-  )
-}
