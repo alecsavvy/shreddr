@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { usePhantom } from "@phantom/react-sdk"
 import { Settings, Ticket, ChevronRight, LogIn, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTickets } from '@/hooks/use-tickets'
 
 export const Route = createFileRoute('/user/')({
   component: UserPage,
@@ -38,6 +39,7 @@ function MenuButton({
 function UserPage() {
   const { isConnected, user, sdk } = usePhantom()
   const navigate = useNavigate()
+  const { clearTickets } = useTickets()
 
   if (!isConnected) {
     return (
@@ -93,6 +95,7 @@ function UserPage() {
       <section className="pt-4">
         <button
           onClick={async () => {
+            clearTickets()
             await sdk?.disconnect()
             navigate({ to: '/' })
           }}
