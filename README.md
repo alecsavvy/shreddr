@@ -9,12 +9,11 @@ A dead simple mobile-first ticketing system for live music and indie events.
 
 ## Features
 
-- 🎵 **Event Discovery** - Discover events near you with an intuitive interface
-- 💳 **Easy Purchases** - Buy tickets with fiat payments via Coinflow
-- 🔐 **Wallet Authentication** - Secure wallet-based authentication with Phantom
-- 📱 **Mobile-First** - Progressive Web App (PWA) optimized for mobile devices
-- 🎫 **QR Code Tickets** - Digital tickets with QR codes for easy redemption
-- ⚡ **Fast & Modern** - Built with React, TypeScript, and Go for performance
+- Browse and discover events in your area
+- Purchase tickets with Apple Pay and Google Pay via Coinflow
+- Social login powered by Phantom Connect
+- Digital tickets with QR codes for sharing and verifiable entry
+- Optimized for mobile use as a Progressive Web App (PWA), no app store required
 
 ## Tech Stack
 
