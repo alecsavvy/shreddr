@@ -22,7 +22,6 @@ import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as UserTicketsIndexRouteImport } from './routes/user/tickets/index'
 import { Route as EventsEventIdIndexRouteImport } from './routes/events/$eventId/index'
 import { Route as UserTicketsTicketIdRouteImport } from './routes/user/tickets/$ticketId'
-import { Route as EventsEventIdPurchaseIndexRouteImport } from './routes/events/$eventId/purchase/index'
 import { Route as EventsEventIdPurchaseSuccessRouteImport } from './routes/events/$eventId/purchase/success'
 import { Route as EventsEventIdPurchasePaymentRouteImport } from './routes/events/$eventId/purchase/payment'
 import { Route as EventsEventIdPurchaseFailureRouteImport } from './routes/events/$eventId/purchase/failure'
@@ -92,12 +91,6 @@ const UserTicketsTicketIdRoute = UserTicketsTicketIdRouteImport.update({
   path: '/tickets/$ticketId',
   getParentRoute: () => UserRoute,
 } as any)
-const EventsEventIdPurchaseIndexRoute =
-  EventsEventIdPurchaseIndexRouteImport.update({
-    id: '/events/$eventId/purchase/',
-    path: '/events/$eventId/purchase/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const EventsEventIdPurchaseSuccessRoute =
   EventsEventIdPurchaseSuccessRouteImport.update({
     id: '/events/$eventId/purchase/success',
@@ -134,7 +127,6 @@ export interface FileRoutesByFullPath {
   '/events/$eventId/purchase/failure': typeof EventsEventIdPurchaseFailureRoute
   '/events/$eventId/purchase/payment': typeof EventsEventIdPurchasePaymentRoute
   '/events/$eventId/purchase/success': typeof EventsEventIdPurchaseSuccessRoute
-  '/events/$eventId/purchase': typeof EventsEventIdPurchaseIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -152,7 +144,6 @@ export interface FileRoutesByTo {
   '/events/$eventId/purchase/failure': typeof EventsEventIdPurchaseFailureRoute
   '/events/$eventId/purchase/payment': typeof EventsEventIdPurchasePaymentRoute
   '/events/$eventId/purchase/success': typeof EventsEventIdPurchaseSuccessRoute
-  '/events/$eventId/purchase': typeof EventsEventIdPurchaseIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -172,7 +163,6 @@ export interface FileRoutesById {
   '/events/$eventId/purchase/failure': typeof EventsEventIdPurchaseFailureRoute
   '/events/$eventId/purchase/payment': typeof EventsEventIdPurchasePaymentRoute
   '/events/$eventId/purchase/success': typeof EventsEventIdPurchaseSuccessRoute
-  '/events/$eventId/purchase/': typeof EventsEventIdPurchaseIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -193,7 +183,6 @@ export interface FileRouteTypes {
     | '/events/$eventId/purchase/failure'
     | '/events/$eventId/purchase/payment'
     | '/events/$eventId/purchase/success'
-    | '/events/$eventId/purchase'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -211,7 +200,6 @@ export interface FileRouteTypes {
     | '/events/$eventId/purchase/failure'
     | '/events/$eventId/purchase/payment'
     | '/events/$eventId/purchase/success'
-    | '/events/$eventId/purchase'
   id:
     | '__root__'
     | '/'
@@ -230,7 +218,6 @@ export interface FileRouteTypes {
     | '/events/$eventId/purchase/failure'
     | '/events/$eventId/purchase/payment'
     | '/events/$eventId/purchase/success'
-    | '/events/$eventId/purchase/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -246,7 +233,6 @@ export interface RootRouteChildren {
   EventsEventIdPurchaseFailureRoute: typeof EventsEventIdPurchaseFailureRoute
   EventsEventIdPurchasePaymentRoute: typeof EventsEventIdPurchasePaymentRoute
   EventsEventIdPurchaseSuccessRoute: typeof EventsEventIdPurchaseSuccessRoute
-  EventsEventIdPurchaseIndexRoute: typeof EventsEventIdPurchaseIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -342,13 +328,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserTicketsTicketIdRouteImport
       parentRoute: typeof UserRoute
     }
-    '/events/$eventId/purchase/': {
-      id: '/events/$eventId/purchase/'
-      path: '/events/$eventId/purchase'
-      fullPath: '/events/$eventId/purchase'
-      preLoaderRoute: typeof EventsEventIdPurchaseIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/events/$eventId/purchase/success': {
       id: '/events/$eventId/purchase/success'
       path: '/events/$eventId/purchase/success'
@@ -402,7 +381,6 @@ const rootRouteChildren: RootRouteChildren = {
   EventsEventIdPurchaseFailureRoute: EventsEventIdPurchaseFailureRoute,
   EventsEventIdPurchasePaymentRoute: EventsEventIdPurchasePaymentRoute,
   EventsEventIdPurchaseSuccessRoute: EventsEventIdPurchaseSuccessRoute,
-  EventsEventIdPurchaseIndexRoute: EventsEventIdPurchaseIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

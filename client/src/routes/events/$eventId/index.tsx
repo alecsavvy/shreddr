@@ -101,7 +101,7 @@ function EventDetailsPage() {
         </Link>
       ) : (
         <Link
-          to="/events/$eventId/purchase"
+          to="/events/$eventId/purchase/payment"
           params={{ eventId }}
           className={cn(
             "group block rounded-xl border border-primary/30 bg-primary/5 p-4",

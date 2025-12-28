@@ -52,12 +52,12 @@ function PaymentPage() {
     <div className="flex h-[calc(100vh-10rem)] flex-col">
       <div className="shrink-0 pb-4">
         <Link 
-          to="/events/$eventId/purchase" 
+          to="/events/$eventId" 
           params={{ eventId }}
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back
+          Back to Event
         </Link>
       </div>
 

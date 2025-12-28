@@ -35,7 +35,7 @@ function PurchaseFailurePage() {
 
       <div className="flex flex-col gap-3">
         <Link
-          to="/events/$eventId/purchase"
+          to="/events/$eventId/purchase/payment"
           params={{ eventId }}
           className={cn(
             "flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3",
