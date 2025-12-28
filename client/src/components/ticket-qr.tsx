@@ -1,5 +1,5 @@
 import { QRCodeSVG } from 'qrcode.react'
-import { CheckCircle, XCircle } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { SignedTicket } from '@/lib/types'
 
