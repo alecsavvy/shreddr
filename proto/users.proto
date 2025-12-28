@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package shreddr;
+
+option go_package = "github.com/alecsavvy/shreddr/server/api/shreddr";
+
+// User represents a user account
+message User {
+  string id = 1; // Phantom auth user ID
+  string wallet_address = 2; // Primary Solana wallet address
+  string created_at = 3; // ISO 8601 timestamp
+  string updated_at = 4; // ISO 8601 timestamp
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message GetUserByWalletRequest {
+  string wallet_address = 1;
+}
+
+message GetUserByWalletResponse {
+  User user = 1;
+}
+
+message CreateUserRequest {
+  string user_id = 1; // Phantom auth user ID
+  string wallet_address = 2; // Solana wallet address
+}
+
+message CreateUserResponse {
+  User user = 1;
+}

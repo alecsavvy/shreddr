@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package shreddr;
+
+option go_package = "github.com/alecsavvy/shreddr/server/api/shreddr";
+
+// Purchase represents a ticket purchase transaction
+message Purchase {
+  string id = 1;
+  string event_id = 2;
+  string user_id = 3; // Phantom auth user ID
+  string wallet_address = 4; // Solana wallet address
+  int64 amount_cents = 5;
+  string status = 6; // pending, completed, failed, refunded
+  string payment_provider = 7; // coinflow, etc.
+  string payment_provider_id = 8; // External payment ID
+  string created_at = 9; // ISO 8601 timestamp
+  string completed_at = 10; // ISO 8601 timestamp, optional
+  string ticket_id = 11; // Associated ticket ID
+}
+
+message CreatePurchaseRequest {
+  string event_id = 1;
+  string user_id = 2;
+  string wallet_address = 3;
+  int64 amount_cents = 4;
+  string payment_provider = 5;
+  string payment_provider_id = 6;
+}
+
+message CreatePurchaseResponse {
+  Purchase purchase = 1;
+}
+
+message GetPurchaseRequest {
+  string purchase_id = 1;
+}
+
+message GetPurchaseResponse {
+  Purchase purchase = 1;
+}
+
+message UpdatePurchaseStatusRequest {
+  string purchase_id = 1;
+  string status = 2; // completed, failed, refunded
+  string payment_provider_id = 3; // Optional: update external ID
+}
+
+message UpdatePurchaseStatusResponse {
+  Purchase purchase = 1;
+}
+
+message ListPurchasesRequest {
+  string user_id = 1; // Optional: filter by user
+  string event_id = 2; // Optional: filter by event
+  string status = 3; // Optional: filter by status
+}
+
+message ListPurchasesResponse {
+  repeated Purchase purchases = 1;
+}
+

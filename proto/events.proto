@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package shreddr;
+
+option go_package = "github.com/alecsavvy/shreddr/server/api/shreddr";
+
+// Event represents a music event or show
+message Event {
+  string id = 1;
+  string name = 2;
+  string date = 3; // ISO 8601 timestamp
+  string venue = 4;
+  string description = 5;
+  int64 price_cents = 6; // Price in cents
+  string image_url = 7; // Optional image URL
+}
+
+message ListEventsRequest {
+  // Optional filters
+  string location = 1; // Filter by location
+  string date_from = 2; // ISO 8601 timestamp
+  string date_to = 3; // ISO 8601 timestamp
+}
+
+message ListEventsResponse {
+  repeated Event events = 1;
+}
+
+message GetEventRequest {
+  string event_id = 1;
+}
+
+message GetEventResponse {
+  Event event = 1;
+}
+
+message CreateEventRequest {
+  string name = 1;
+  string date = 2; // ISO 8601 timestamp
+  string venue = 3;
+  string description = 4;
+  int64 price_cents = 5;
+  string image_url = 6;
+}
+
+message CreateEventResponse {
+  Event event = 1;
+}

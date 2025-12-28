@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package shreddr;
+
+// Import all domain proto files
+import "events.proto";
+import "purchases.proto";
+import "tickets.proto";
+import "users.proto";
+
+option go_package = "github.com/alecsavvy/shreddr/server/api/shreddr";
+
+// ShreddrService aggregates all domain services into a single unified service
+service ShreddrService {
+  // Events
+  rpc ListEvents(shreddr.ListEventsRequest) returns (shreddr.ListEventsResponse);
+  rpc GetEvent(shreddr.GetEventRequest) returns (shreddr.GetEventResponse);
+  rpc CreateEvent(shreddr.CreateEventRequest) returns (shreddr.CreateEventResponse);
+
+  // Tickets
+  rpc ListTickets(shreddr.ListTicketsRequest) returns (shreddr.ListTicketsResponse);
+  rpc GetTicket(shreddr.GetTicketRequest) returns (shreddr.GetTicketResponse);
+  rpc CreateTicket(shreddr.CreateTicketRequest) returns (shreddr.CreateTicketResponse);
+  rpc RedeemTicket(shreddr.RedeemTicketRequest) returns (shreddr.RedeemTicketResponse);
+  rpc VerifyTicket(shreddr.VerifyTicketRequest) returns (shreddr.VerifyTicketResponse);
+
+  // Users
+  rpc GetUser(shreddr.GetUserRequest) returns (shreddr.GetUserResponse);
+  rpc GetUserByWallet(shreddr.GetUserByWalletRequest) returns (shreddr.GetUserByWalletResponse);
+  rpc CreateUser(shreddr.CreateUserRequest) returns (shreddr.CreateUserResponse);
+
+  // Purchases
+  rpc CreatePurchase(shreddr.CreatePurchaseRequest) returns (shreddr.CreatePurchaseResponse);
+  rpc GetPurchase(shreddr.GetPurchaseRequest) returns (shreddr.GetPurchaseResponse);
+  rpc UpdatePurchaseStatus(shreddr.UpdatePurchaseStatusRequest) returns (shreddr.UpdatePurchaseStatusResponse);
+  rpc ListPurchases(shreddr.ListPurchasesRequest) returns (shreddr.ListPurchasesResponse);
+}
