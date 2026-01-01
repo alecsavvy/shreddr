@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package shreddr;
 
-option go_package = "github.com/alecsavvy/shreddr/server/api/shreddr";
+option go_package = "github.com/alecsavvy/shreddr/server/api";
 
 // Purchase represents a ticket purchase transaction
 message Purchase {
@@ -59,4 +59,3 @@ message ListPurchasesRequest {
 message ListPurchasesResponse {
   repeated Purchase purchases = 1;
 }
-

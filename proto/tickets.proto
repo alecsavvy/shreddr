@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package shreddr;
 
-option go_package = "github.com/alecsavvy/shreddr/server/api/shreddr";
+option go_package = "github.com/alecsavvy/shreddr/server/api";
 
 // TicketPayload contains the core ticket data before signing
 message TicketPayload {
@@ -70,4 +70,3 @@ message VerifyTicketResponse {
   Ticket ticket = 2; // Ticket if valid
   string error = 3; // Error message if invalid
 }
-

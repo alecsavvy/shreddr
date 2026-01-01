@@ -8,7 +8,7 @@ import "purchases.proto";
 import "tickets.proto";
 import "users.proto";
 
-option go_package = "github.com/alecsavvy/shreddr/server/api/shreddr";
+option go_package = "github.com/alecsavvy/shreddr/server/api";
 
 // ShreddrService aggregates all domain services into a single unified service
 service ShreddrService {

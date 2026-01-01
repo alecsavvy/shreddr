@@ -2,13 +2,13 @@
 //
 // Source: service.proto
 
-package shreddrconnect
+package apiconnect
 
 import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	shreddr "github.com/alecsavvy/shreddr/server/api/shreddr"
+	api "github.com/alecsavvy/shreddr/server/api"
 	http "net/http"
 	strings "strings"
 )
@@ -81,24 +81,24 @@ const (
 // ShreddrServiceClient is a client for the shreddr.ShreddrService service.
 type ShreddrServiceClient interface {
 	// Events
-	ListEvents(context.Context, *connect.Request[shreddr.ListEventsRequest]) (*connect.Response[shreddr.ListEventsResponse], error)
-	GetEvent(context.Context, *connect.Request[shreddr.GetEventRequest]) (*connect.Response[shreddr.GetEventResponse], error)
-	CreateEvent(context.Context, *connect.Request[shreddr.CreateEventRequest]) (*connect.Response[shreddr.CreateEventResponse], error)
+	ListEvents(context.Context, *connect.Request[api.ListEventsRequest]) (*connect.Response[api.ListEventsResponse], error)
+	GetEvent(context.Context, *connect.Request[api.GetEventRequest]) (*connect.Response[api.GetEventResponse], error)
+	CreateEvent(context.Context, *connect.Request[api.CreateEventRequest]) (*connect.Response[api.CreateEventResponse], error)
 	// Tickets
-	ListTickets(context.Context, *connect.Request[shreddr.ListTicketsRequest]) (*connect.Response[shreddr.ListTicketsResponse], error)
-	GetTicket(context.Context, *connect.Request[shreddr.GetTicketRequest]) (*connect.Response[shreddr.GetTicketResponse], error)
-	CreateTicket(context.Context, *connect.Request[shreddr.CreateTicketRequest]) (*connect.Response[shreddr.CreateTicketResponse], error)
-	RedeemTicket(context.Context, *connect.Request[shreddr.RedeemTicketRequest]) (*connect.Response[shreddr.RedeemTicketResponse], error)
-	VerifyTicket(context.Context, *connect.Request[shreddr.VerifyTicketRequest]) (*connect.Response[shreddr.VerifyTicketResponse], error)
+	ListTickets(context.Context, *connect.Request[api.ListTicketsRequest]) (*connect.Response[api.ListTicketsResponse], error)
+	GetTicket(context.Context, *connect.Request[api.GetTicketRequest]) (*connect.Response[api.GetTicketResponse], error)
+	CreateTicket(context.Context, *connect.Request[api.CreateTicketRequest]) (*connect.Response[api.CreateTicketResponse], error)
+	RedeemTicket(context.Context, *connect.Request[api.RedeemTicketRequest]) (*connect.Response[api.RedeemTicketResponse], error)
+	VerifyTicket(context.Context, *connect.Request[api.VerifyTicketRequest]) (*connect.Response[api.VerifyTicketResponse], error)
 	// Users
-	GetUser(context.Context, *connect.Request[shreddr.GetUserRequest]) (*connect.Response[shreddr.GetUserResponse], error)
-	GetUserByWallet(context.Context, *connect.Request[shreddr.GetUserByWalletRequest]) (*connect.Response[shreddr.GetUserByWalletResponse], error)
-	CreateUser(context.Context, *connect.Request[shreddr.CreateUserRequest]) (*connect.Response[shreddr.CreateUserResponse], error)
+	GetUser(context.Context, *connect.Request[api.GetUserRequest]) (*connect.Response[api.GetUserResponse], error)
+	GetUserByWallet(context.Context, *connect.Request[api.GetUserByWalletRequest]) (*connect.Response[api.GetUserByWalletResponse], error)
+	CreateUser(context.Context, *connect.Request[api.CreateUserRequest]) (*connect.Response[api.CreateUserResponse], error)
 	// Purchases
-	CreatePurchase(context.Context, *connect.Request[shreddr.CreatePurchaseRequest]) (*connect.Response[shreddr.CreatePurchaseResponse], error)
-	GetPurchase(context.Context, *connect.Request[shreddr.GetPurchaseRequest]) (*connect.Response[shreddr.GetPurchaseResponse], error)
-	UpdatePurchaseStatus(context.Context, *connect.Request[shreddr.UpdatePurchaseStatusRequest]) (*connect.Response[shreddr.UpdatePurchaseStatusResponse], error)
-	ListPurchases(context.Context, *connect.Request[shreddr.ListPurchasesRequest]) (*connect.Response[shreddr.ListPurchasesResponse], error)
+	CreatePurchase(context.Context, *connect.Request[api.CreatePurchaseRequest]) (*connect.Response[api.CreatePurchaseResponse], error)
+	GetPurchase(context.Context, *connect.Request[api.GetPurchaseRequest]) (*connect.Response[api.GetPurchaseResponse], error)
+	UpdatePurchaseStatus(context.Context, *connect.Request[api.UpdatePurchaseStatusRequest]) (*connect.Response[api.UpdatePurchaseStatusResponse], error)
+	ListPurchases(context.Context, *connect.Request[api.ListPurchasesRequest]) (*connect.Response[api.ListPurchasesResponse], error)
 }
 
 // NewShreddrServiceClient constructs a client for the shreddr.ShreddrService service. By default,
@@ -110,93 +110,93 @@ type ShreddrServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewShreddrServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) ShreddrServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	shreddrServiceMethods := shreddr.File_service_proto.Services().ByName("ShreddrService").Methods()
+	shreddrServiceMethods := api.File_service_proto.Services().ByName("ShreddrService").Methods()
 	return &shreddrServiceClient{
-		listEvents: connect.NewClient[shreddr.ListEventsRequest, shreddr.ListEventsResponse](
+		listEvents: connect.NewClient[api.ListEventsRequest, api.ListEventsResponse](
 			httpClient,
 			baseURL+ShreddrServiceListEventsProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("ListEvents")),
 			connect.WithClientOptions(opts...),
 		),
-		getEvent: connect.NewClient[shreddr.GetEventRequest, shreddr.GetEventResponse](
+		getEvent: connect.NewClient[api.GetEventRequest, api.GetEventResponse](
 			httpClient,
 			baseURL+ShreddrServiceGetEventProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("GetEvent")),
 			connect.WithClientOptions(opts...),
 		),
-		createEvent: connect.NewClient[shreddr.CreateEventRequest, shreddr.CreateEventResponse](
+		createEvent: connect.NewClient[api.CreateEventRequest, api.CreateEventResponse](
 			httpClient,
 			baseURL+ShreddrServiceCreateEventProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("CreateEvent")),
 			connect.WithClientOptions(opts...),
 		),
-		listTickets: connect.NewClient[shreddr.ListTicketsRequest, shreddr.ListTicketsResponse](
+		listTickets: connect.NewClient[api.ListTicketsRequest, api.ListTicketsResponse](
 			httpClient,
 			baseURL+ShreddrServiceListTicketsProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("ListTickets")),
 			connect.WithClientOptions(opts...),
 		),
-		getTicket: connect.NewClient[shreddr.GetTicketRequest, shreddr.GetTicketResponse](
+		getTicket: connect.NewClient[api.GetTicketRequest, api.GetTicketResponse](
 			httpClient,
 			baseURL+ShreddrServiceGetTicketProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("GetTicket")),
 			connect.WithClientOptions(opts...),
 		),
-		createTicket: connect.NewClient[shreddr.CreateTicketRequest, shreddr.CreateTicketResponse](
+		createTicket: connect.NewClient[api.CreateTicketRequest, api.CreateTicketResponse](
 			httpClient,
 			baseURL+ShreddrServiceCreateTicketProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("CreateTicket")),
 			connect.WithClientOptions(opts...),
 		),
-		redeemTicket: connect.NewClient[shreddr.RedeemTicketRequest, shreddr.RedeemTicketResponse](
+		redeemTicket: connect.NewClient[api.RedeemTicketRequest, api.RedeemTicketResponse](
 			httpClient,
 			baseURL+ShreddrServiceRedeemTicketProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("RedeemTicket")),
 			connect.WithClientOptions(opts...),
 		),
-		verifyTicket: connect.NewClient[shreddr.VerifyTicketRequest, shreddr.VerifyTicketResponse](
+		verifyTicket: connect.NewClient[api.VerifyTicketRequest, api.VerifyTicketResponse](
 			httpClient,
 			baseURL+ShreddrServiceVerifyTicketProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("VerifyTicket")),
 			connect.WithClientOptions(opts...),
 		),
-		getUser: connect.NewClient[shreddr.GetUserRequest, shreddr.GetUserResponse](
+		getUser: connect.NewClient[api.GetUserRequest, api.GetUserResponse](
 			httpClient,
 			baseURL+ShreddrServiceGetUserProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("GetUser")),
 			connect.WithClientOptions(opts...),
 		),
-		getUserByWallet: connect.NewClient[shreddr.GetUserByWalletRequest, shreddr.GetUserByWalletResponse](
+		getUserByWallet: connect.NewClient[api.GetUserByWalletRequest, api.GetUserByWalletResponse](
 			httpClient,
 			baseURL+ShreddrServiceGetUserByWalletProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("GetUserByWallet")),
 			connect.WithClientOptions(opts...),
 		),
-		createUser: connect.NewClient[shreddr.CreateUserRequest, shreddr.CreateUserResponse](
+		createUser: connect.NewClient[api.CreateUserRequest, api.CreateUserResponse](
 			httpClient,
 			baseURL+ShreddrServiceCreateUserProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("CreateUser")),
 			connect.WithClientOptions(opts...),
 		),
-		createPurchase: connect.NewClient[shreddr.CreatePurchaseRequest, shreddr.CreatePurchaseResponse](
+		createPurchase: connect.NewClient[api.CreatePurchaseRequest, api.CreatePurchaseResponse](
 			httpClient,
 			baseURL+ShreddrServiceCreatePurchaseProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("CreatePurchase")),
 			connect.WithClientOptions(opts...),
 		),
-		getPurchase: connect.NewClient[shreddr.GetPurchaseRequest, shreddr.GetPurchaseResponse](
+		getPurchase: connect.NewClient[api.GetPurchaseRequest, api.GetPurchaseResponse](
 			httpClient,
 			baseURL+ShreddrServiceGetPurchaseProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("GetPurchase")),
 			connect.WithClientOptions(opts...),
 		),
-		updatePurchaseStatus: connect.NewClient[shreddr.UpdatePurchaseStatusRequest, shreddr.UpdatePurchaseStatusResponse](
+		updatePurchaseStatus: connect.NewClient[api.UpdatePurchaseStatusRequest, api.UpdatePurchaseStatusResponse](
 			httpClient,
 			baseURL+ShreddrServiceUpdatePurchaseStatusProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("UpdatePurchaseStatus")),
 			connect.WithClientOptions(opts...),
 		),
-		listPurchases: connect.NewClient[shreddr.ListPurchasesRequest, shreddr.ListPurchasesResponse](
+		listPurchases: connect.NewClient[api.ListPurchasesRequest, api.ListPurchasesResponse](
 			httpClient,
 			baseURL+ShreddrServiceListPurchasesProcedure,
 			connect.WithSchema(shreddrServiceMethods.ByName("ListPurchases")),
@@ -207,119 +207,119 @@ func NewShreddrServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 
 // shreddrServiceClient implements ShreddrServiceClient.
 type shreddrServiceClient struct {
-	listEvents           *connect.Client[shreddr.ListEventsRequest, shreddr.ListEventsResponse]
-	getEvent             *connect.Client[shreddr.GetEventRequest, shreddr.GetEventResponse]
-	createEvent          *connect.Client[shreddr.CreateEventRequest, shreddr.CreateEventResponse]
-	listTickets          *connect.Client[shreddr.ListTicketsRequest, shreddr.ListTicketsResponse]
-	getTicket            *connect.Client[shreddr.GetTicketRequest, shreddr.GetTicketResponse]
-	createTicket         *connect.Client[shreddr.CreateTicketRequest, shreddr.CreateTicketResponse]
-	redeemTicket         *connect.Client[shreddr.RedeemTicketRequest, shreddr.RedeemTicketResponse]
-	verifyTicket         *connect.Client[shreddr.VerifyTicketRequest, shreddr.VerifyTicketResponse]
-	getUser              *connect.Client[shreddr.GetUserRequest, shreddr.GetUserResponse]
-	getUserByWallet      *connect.Client[shreddr.GetUserByWalletRequest, shreddr.GetUserByWalletResponse]
-	createUser           *connect.Client[shreddr.CreateUserRequest, shreddr.CreateUserResponse]
-	createPurchase       *connect.Client[shreddr.CreatePurchaseRequest, shreddr.CreatePurchaseResponse]
-	getPurchase          *connect.Client[shreddr.GetPurchaseRequest, shreddr.GetPurchaseResponse]
-	updatePurchaseStatus *connect.Client[shreddr.UpdatePurchaseStatusRequest, shreddr.UpdatePurchaseStatusResponse]
-	listPurchases        *connect.Client[shreddr.ListPurchasesRequest, shreddr.ListPurchasesResponse]
+	listEvents           *connect.Client[api.ListEventsRequest, api.ListEventsResponse]
+	getEvent             *connect.Client[api.GetEventRequest, api.GetEventResponse]
+	createEvent          *connect.Client[api.CreateEventRequest, api.CreateEventResponse]
+	listTickets          *connect.Client[api.ListTicketsRequest, api.ListTicketsResponse]
+	getTicket            *connect.Client[api.GetTicketRequest, api.GetTicketResponse]
+	createTicket         *connect.Client[api.CreateTicketRequest, api.CreateTicketResponse]
+	redeemTicket         *connect.Client[api.RedeemTicketRequest, api.RedeemTicketResponse]
+	verifyTicket         *connect.Client[api.VerifyTicketRequest, api.VerifyTicketResponse]
+	getUser              *connect.Client[api.GetUserRequest, api.GetUserResponse]
+	getUserByWallet      *connect.Client[api.GetUserByWalletRequest, api.GetUserByWalletResponse]
+	createUser           *connect.Client[api.CreateUserRequest, api.CreateUserResponse]
+	createPurchase       *connect.Client[api.CreatePurchaseRequest, api.CreatePurchaseResponse]
+	getPurchase          *connect.Client[api.GetPurchaseRequest, api.GetPurchaseResponse]
+	updatePurchaseStatus *connect.Client[api.UpdatePurchaseStatusRequest, api.UpdatePurchaseStatusResponse]
+	listPurchases        *connect.Client[api.ListPurchasesRequest, api.ListPurchasesResponse]
 }
 
 // ListEvents calls shreddr.ShreddrService.ListEvents.
-func (c *shreddrServiceClient) ListEvents(ctx context.Context, req *connect.Request[shreddr.ListEventsRequest]) (*connect.Response[shreddr.ListEventsResponse], error) {
+func (c *shreddrServiceClient) ListEvents(ctx context.Context, req *connect.Request[api.ListEventsRequest]) (*connect.Response[api.ListEventsResponse], error) {
 	return c.listEvents.CallUnary(ctx, req)
 }
 
 // GetEvent calls shreddr.ShreddrService.GetEvent.
-func (c *shreddrServiceClient) GetEvent(ctx context.Context, req *connect.Request[shreddr.GetEventRequest]) (*connect.Response[shreddr.GetEventResponse], error) {
+func (c *shreddrServiceClient) GetEvent(ctx context.Context, req *connect.Request[api.GetEventRequest]) (*connect.Response[api.GetEventResponse], error) {
 	return c.getEvent.CallUnary(ctx, req)
 }
 
 // CreateEvent calls shreddr.ShreddrService.CreateEvent.
-func (c *shreddrServiceClient) CreateEvent(ctx context.Context, req *connect.Request[shreddr.CreateEventRequest]) (*connect.Response[shreddr.CreateEventResponse], error) {
+func (c *shreddrServiceClient) CreateEvent(ctx context.Context, req *connect.Request[api.CreateEventRequest]) (*connect.Response[api.CreateEventResponse], error) {
 	return c.createEvent.CallUnary(ctx, req)
 }
 
 // ListTickets calls shreddr.ShreddrService.ListTickets.
-func (c *shreddrServiceClient) ListTickets(ctx context.Context, req *connect.Request[shreddr.ListTicketsRequest]) (*connect.Response[shreddr.ListTicketsResponse], error) {
+func (c *shreddrServiceClient) ListTickets(ctx context.Context, req *connect.Request[api.ListTicketsRequest]) (*connect.Response[api.ListTicketsResponse], error) {
 	return c.listTickets.CallUnary(ctx, req)
 }
 
 // GetTicket calls shreddr.ShreddrService.GetTicket.
-func (c *shreddrServiceClient) GetTicket(ctx context.Context, req *connect.Request[shreddr.GetTicketRequest]) (*connect.Response[shreddr.GetTicketResponse], error) {
+func (c *shreddrServiceClient) GetTicket(ctx context.Context, req *connect.Request[api.GetTicketRequest]) (*connect.Response[api.GetTicketResponse], error) {
 	return c.getTicket.CallUnary(ctx, req)
 }
 
 // CreateTicket calls shreddr.ShreddrService.CreateTicket.
-func (c *shreddrServiceClient) CreateTicket(ctx context.Context, req *connect.Request[shreddr.CreateTicketRequest]) (*connect.Response[shreddr.CreateTicketResponse], error) {
+func (c *shreddrServiceClient) CreateTicket(ctx context.Context, req *connect.Request[api.CreateTicketRequest]) (*connect.Response[api.CreateTicketResponse], error) {
 	return c.createTicket.CallUnary(ctx, req)
 }
 
 // RedeemTicket calls shreddr.ShreddrService.RedeemTicket.
-func (c *shreddrServiceClient) RedeemTicket(ctx context.Context, req *connect.Request[shreddr.RedeemTicketRequest]) (*connect.Response[shreddr.RedeemTicketResponse], error) {
+func (c *shreddrServiceClient) RedeemTicket(ctx context.Context, req *connect.Request[api.RedeemTicketRequest]) (*connect.Response[api.RedeemTicketResponse], error) {
 	return c.redeemTicket.CallUnary(ctx, req)
 }
 
 // VerifyTicket calls shreddr.ShreddrService.VerifyTicket.
-func (c *shreddrServiceClient) VerifyTicket(ctx context.Context, req *connect.Request[shreddr.VerifyTicketRequest]) (*connect.Response[shreddr.VerifyTicketResponse], error) {
+func (c *shreddrServiceClient) VerifyTicket(ctx context.Context, req *connect.Request[api.VerifyTicketRequest]) (*connect.Response[api.VerifyTicketResponse], error) {
 	return c.verifyTicket.CallUnary(ctx, req)
 }
 
 // GetUser calls shreddr.ShreddrService.GetUser.
-func (c *shreddrServiceClient) GetUser(ctx context.Context, req *connect.Request[shreddr.GetUserRequest]) (*connect.Response[shreddr.GetUserResponse], error) {
+func (c *shreddrServiceClient) GetUser(ctx context.Context, req *connect.Request[api.GetUserRequest]) (*connect.Response[api.GetUserResponse], error) {
 	return c.getUser.CallUnary(ctx, req)
 }
 
 // GetUserByWallet calls shreddr.ShreddrService.GetUserByWallet.
-func (c *shreddrServiceClient) GetUserByWallet(ctx context.Context, req *connect.Request[shreddr.GetUserByWalletRequest]) (*connect.Response[shreddr.GetUserByWalletResponse], error) {
+func (c *shreddrServiceClient) GetUserByWallet(ctx context.Context, req *connect.Request[api.GetUserByWalletRequest]) (*connect.Response[api.GetUserByWalletResponse], error) {
 	return c.getUserByWallet.CallUnary(ctx, req)
 }
 
 // CreateUser calls shreddr.ShreddrService.CreateUser.
-func (c *shreddrServiceClient) CreateUser(ctx context.Context, req *connect.Request[shreddr.CreateUserRequest]) (*connect.Response[shreddr.CreateUserResponse], error) {
+func (c *shreddrServiceClient) CreateUser(ctx context.Context, req *connect.Request[api.CreateUserRequest]) (*connect.Response[api.CreateUserResponse], error) {
 	return c.createUser.CallUnary(ctx, req)
 }
 
 // CreatePurchase calls shreddr.ShreddrService.CreatePurchase.
-func (c *shreddrServiceClient) CreatePurchase(ctx context.Context, req *connect.Request[shreddr.CreatePurchaseRequest]) (*connect.Response[shreddr.CreatePurchaseResponse], error) {
+func (c *shreddrServiceClient) CreatePurchase(ctx context.Context, req *connect.Request[api.CreatePurchaseRequest]) (*connect.Response[api.CreatePurchaseResponse], error) {
 	return c.createPurchase.CallUnary(ctx, req)
 }
 
 // GetPurchase calls shreddr.ShreddrService.GetPurchase.
-func (c *shreddrServiceClient) GetPurchase(ctx context.Context, req *connect.Request[shreddr.GetPurchaseRequest]) (*connect.Response[shreddr.GetPurchaseResponse], error) {
+func (c *shreddrServiceClient) GetPurchase(ctx context.Context, req *connect.Request[api.GetPurchaseRequest]) (*connect.Response[api.GetPurchaseResponse], error) {
 	return c.getPurchase.CallUnary(ctx, req)
 }
 
 // UpdatePurchaseStatus calls shreddr.ShreddrService.UpdatePurchaseStatus.
-func (c *shreddrServiceClient) UpdatePurchaseStatus(ctx context.Context, req *connect.Request[shreddr.UpdatePurchaseStatusRequest]) (*connect.Response[shreddr.UpdatePurchaseStatusResponse], error) {
+func (c *shreddrServiceClient) UpdatePurchaseStatus(ctx context.Context, req *connect.Request[api.UpdatePurchaseStatusRequest]) (*connect.Response[api.UpdatePurchaseStatusResponse], error) {
 	return c.updatePurchaseStatus.CallUnary(ctx, req)
 }
 
 // ListPurchases calls shreddr.ShreddrService.ListPurchases.
-func (c *shreddrServiceClient) ListPurchases(ctx context.Context, req *connect.Request[shreddr.ListPurchasesRequest]) (*connect.Response[shreddr.ListPurchasesResponse], error) {
+func (c *shreddrServiceClient) ListPurchases(ctx context.Context, req *connect.Request[api.ListPurchasesRequest]) (*connect.Response[api.ListPurchasesResponse], error) {
 	return c.listPurchases.CallUnary(ctx, req)
 }
 
 // ShreddrServiceHandler is an implementation of the shreddr.ShreddrService service.
 type ShreddrServiceHandler interface {
 	// Events
-	ListEvents(context.Context, *connect.Request[shreddr.ListEventsRequest]) (*connect.Response[shreddr.ListEventsResponse], error)
-	GetEvent(context.Context, *connect.Request[shreddr.GetEventRequest]) (*connect.Response[shreddr.GetEventResponse], error)
-	CreateEvent(context.Context, *connect.Request[shreddr.CreateEventRequest]) (*connect.Response[shreddr.CreateEventResponse], error)
+	ListEvents(context.Context, *connect.Request[api.ListEventsRequest]) (*connect.Response[api.ListEventsResponse], error)
+	GetEvent(context.Context, *connect.Request[api.GetEventRequest]) (*connect.Response[api.GetEventResponse], error)
+	CreateEvent(context.Context, *connect.Request[api.CreateEventRequest]) (*connect.Response[api.CreateEventResponse], error)
 	// Tickets
-	ListTickets(context.Context, *connect.Request[shreddr.ListTicketsRequest]) (*connect.Response[shreddr.ListTicketsResponse], error)
-	GetTicket(context.Context, *connect.Request[shreddr.GetTicketRequest]) (*connect.Response[shreddr.GetTicketResponse], error)
-	CreateTicket(context.Context, *connect.Request[shreddr.CreateTicketRequest]) (*connect.Response[shreddr.CreateTicketResponse], error)
-	RedeemTicket(context.Context, *connect.Request[shreddr.RedeemTicketRequest]) (*connect.Response[shreddr.RedeemTicketResponse], error)
-	VerifyTicket(context.Context, *connect.Request[shreddr.VerifyTicketRequest]) (*connect.Response[shreddr.VerifyTicketResponse], error)
+	ListTickets(context.Context, *connect.Request[api.ListTicketsRequest]) (*connect.Response[api.ListTicketsResponse], error)
+	GetTicket(context.Context, *connect.Request[api.GetTicketRequest]) (*connect.Response[api.GetTicketResponse], error)
+	CreateTicket(context.Context, *connect.Request[api.CreateTicketRequest]) (*connect.Response[api.CreateTicketResponse], error)
+	RedeemTicket(context.Context, *connect.Request[api.RedeemTicketRequest]) (*connect.Response[api.RedeemTicketResponse], error)
+	VerifyTicket(context.Context, *connect.Request[api.VerifyTicketRequest]) (*connect.Response[api.VerifyTicketResponse], error)
 	// Users
-	GetUser(context.Context, *connect.Request[shreddr.GetUserRequest]) (*connect.Response[shreddr.GetUserResponse], error)
-	GetUserByWallet(context.Context, *connect.Request[shreddr.GetUserByWalletRequest]) (*connect.Response[shreddr.GetUserByWalletResponse], error)
-	CreateUser(context.Context, *connect.Request[shreddr.CreateUserRequest]) (*connect.Response[shreddr.CreateUserResponse], error)
+	GetUser(context.Context, *connect.Request[api.GetUserRequest]) (*connect.Response[api.GetUserResponse], error)
+	GetUserByWallet(context.Context, *connect.Request[api.GetUserByWalletRequest]) (*connect.Response[api.GetUserByWalletResponse], error)
+	CreateUser(context.Context, *connect.Request[api.CreateUserRequest]) (*connect.Response[api.CreateUserResponse], error)
 	// Purchases
-	CreatePurchase(context.Context, *connect.Request[shreddr.CreatePurchaseRequest]) (*connect.Response[shreddr.CreatePurchaseResponse], error)
-	GetPurchase(context.Context, *connect.Request[shreddr.GetPurchaseRequest]) (*connect.Response[shreddr.GetPurchaseResponse], error)
-	UpdatePurchaseStatus(context.Context, *connect.Request[shreddr.UpdatePurchaseStatusRequest]) (*connect.Response[shreddr.UpdatePurchaseStatusResponse], error)
-	ListPurchases(context.Context, *connect.Request[shreddr.ListPurchasesRequest]) (*connect.Response[shreddr.ListPurchasesResponse], error)
+	CreatePurchase(context.Context, *connect.Request[api.CreatePurchaseRequest]) (*connect.Response[api.CreatePurchaseResponse], error)
+	GetPurchase(context.Context, *connect.Request[api.GetPurchaseRequest]) (*connect.Response[api.GetPurchaseResponse], error)
+	UpdatePurchaseStatus(context.Context, *connect.Request[api.UpdatePurchaseStatusRequest]) (*connect.Response[api.UpdatePurchaseStatusResponse], error)
+	ListPurchases(context.Context, *connect.Request[api.ListPurchasesRequest]) (*connect.Response[api.ListPurchasesResponse], error)
 }
 
 // NewShreddrServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -328,7 +328,7 @@ type ShreddrServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewShreddrServiceHandler(svc ShreddrServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	shreddrServiceMethods := shreddr.File_service_proto.Services().ByName("ShreddrService").Methods()
+	shreddrServiceMethods := api.File_service_proto.Services().ByName("ShreddrService").Methods()
 	shreddrServiceListEventsHandler := connect.NewUnaryHandler(
 		ShreddrServiceListEventsProcedure,
 		svc.ListEvents,
@@ -460,62 +460,62 @@ func NewShreddrServiceHandler(svc ShreddrServiceHandler, opts ...connect.Handler
 // UnimplementedShreddrServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedShreddrServiceHandler struct{}
 
-func (UnimplementedShreddrServiceHandler) ListEvents(context.Context, *connect.Request[shreddr.ListEventsRequest]) (*connect.Response[shreddr.ListEventsResponse], error) {
+func (UnimplementedShreddrServiceHandler) ListEvents(context.Context, *connect.Request[api.ListEventsRequest]) (*connect.Response[api.ListEventsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.ListEvents is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) GetEvent(context.Context, *connect.Request[shreddr.GetEventRequest]) (*connect.Response[shreddr.GetEventResponse], error) {
+func (UnimplementedShreddrServiceHandler) GetEvent(context.Context, *connect.Request[api.GetEventRequest]) (*connect.Response[api.GetEventResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.GetEvent is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) CreateEvent(context.Context, *connect.Request[shreddr.CreateEventRequest]) (*connect.Response[shreddr.CreateEventResponse], error) {
+func (UnimplementedShreddrServiceHandler) CreateEvent(context.Context, *connect.Request[api.CreateEventRequest]) (*connect.Response[api.CreateEventResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.CreateEvent is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) ListTickets(context.Context, *connect.Request[shreddr.ListTicketsRequest]) (*connect.Response[shreddr.ListTicketsResponse], error) {
+func (UnimplementedShreddrServiceHandler) ListTickets(context.Context, *connect.Request[api.ListTicketsRequest]) (*connect.Response[api.ListTicketsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.ListTickets is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) GetTicket(context.Context, *connect.Request[shreddr.GetTicketRequest]) (*connect.Response[shreddr.GetTicketResponse], error) {
+func (UnimplementedShreddrServiceHandler) GetTicket(context.Context, *connect.Request[api.GetTicketRequest]) (*connect.Response[api.GetTicketResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.GetTicket is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) CreateTicket(context.Context, *connect.Request[shreddr.CreateTicketRequest]) (*connect.Response[shreddr.CreateTicketResponse], error) {
+func (UnimplementedShreddrServiceHandler) CreateTicket(context.Context, *connect.Request[api.CreateTicketRequest]) (*connect.Response[api.CreateTicketResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.CreateTicket is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) RedeemTicket(context.Context, *connect.Request[shreddr.RedeemTicketRequest]) (*connect.Response[shreddr.RedeemTicketResponse], error) {
+func (UnimplementedShreddrServiceHandler) RedeemTicket(context.Context, *connect.Request[api.RedeemTicketRequest]) (*connect.Response[api.RedeemTicketResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.RedeemTicket is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) VerifyTicket(context.Context, *connect.Request[shreddr.VerifyTicketRequest]) (*connect.Response[shreddr.VerifyTicketResponse], error) {
+func (UnimplementedShreddrServiceHandler) VerifyTicket(context.Context, *connect.Request[api.VerifyTicketRequest]) (*connect.Response[api.VerifyTicketResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.VerifyTicket is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) GetUser(context.Context, *connect.Request[shreddr.GetUserRequest]) (*connect.Response[shreddr.GetUserResponse], error) {
+func (UnimplementedShreddrServiceHandler) GetUser(context.Context, *connect.Request[api.GetUserRequest]) (*connect.Response[api.GetUserResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.GetUser is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) GetUserByWallet(context.Context, *connect.Request[shreddr.GetUserByWalletRequest]) (*connect.Response[shreddr.GetUserByWalletResponse], error) {
+func (UnimplementedShreddrServiceHandler) GetUserByWallet(context.Context, *connect.Request[api.GetUserByWalletRequest]) (*connect.Response[api.GetUserByWalletResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.GetUserByWallet is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) CreateUser(context.Context, *connect.Request[shreddr.CreateUserRequest]) (*connect.Response[shreddr.CreateUserResponse], error) {
+func (UnimplementedShreddrServiceHandler) CreateUser(context.Context, *connect.Request[api.CreateUserRequest]) (*connect.Response[api.CreateUserResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.CreateUser is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) CreatePurchase(context.Context, *connect.Request[shreddr.CreatePurchaseRequest]) (*connect.Response[shreddr.CreatePurchaseResponse], error) {
+func (UnimplementedShreddrServiceHandler) CreatePurchase(context.Context, *connect.Request[api.CreatePurchaseRequest]) (*connect.Response[api.CreatePurchaseResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.CreatePurchase is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) GetPurchase(context.Context, *connect.Request[shreddr.GetPurchaseRequest]) (*connect.Response[shreddr.GetPurchaseResponse], error) {
+func (UnimplementedShreddrServiceHandler) GetPurchase(context.Context, *connect.Request[api.GetPurchaseRequest]) (*connect.Response[api.GetPurchaseResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.GetPurchase is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) UpdatePurchaseStatus(context.Context, *connect.Request[shreddr.UpdatePurchaseStatusRequest]) (*connect.Response[shreddr.UpdatePurchaseStatusResponse], error) {
+func (UnimplementedShreddrServiceHandler) UpdatePurchaseStatus(context.Context, *connect.Request[api.UpdatePurchaseStatusRequest]) (*connect.Response[api.UpdatePurchaseStatusResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.UpdatePurchaseStatus is not implemented"))
 }
 
-func (UnimplementedShreddrServiceHandler) ListPurchases(context.Context, *connect.Request[shreddr.ListPurchasesRequest]) (*connect.Response[shreddr.ListPurchasesResponse], error) {
+func (UnimplementedShreddrServiceHandler) ListPurchases(context.Context, *connect.Request[api.ListPurchasesRequest]) (*connect.Response[api.ListPurchasesResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("shreddr.ShreddrService.ListPurchases is not implemented"))
 }

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package shreddr;
 
-option go_package = "github.com/alecsavvy/shreddr/server/api/shreddr";
+option go_package = "github.com/alecsavvy/shreddr/server/api";
 
 // Event represents a music event or show
 message Event {
