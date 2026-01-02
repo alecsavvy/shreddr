@@ -3,18 +3,22 @@ package server
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/alecsavvy/shreddr/server/api/apiconnect"
 	db "github.com/alecsavvy/shreddr/server/db"
 	"github.com/jackc/pgx/v5"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type Server struct {
-	db     *db.Queries
-	server *http.Server
+	db      *db.Queries
+	server  *http.Server
+	address string
+	port    string
+	e       *echo.Echo
 }
 
 var _ apiconnect.ShreddrServiceHandler = (*Server)(nil)
@@ -55,33 +59,38 @@ func NewServer() (*Server, error) {
 
 	s := &Server{db: queries}
 
-	mux := http.NewServeMux()
-	mux.Handle(apiconnect.NewShreddrServiceHandler(s))
+	e := echo.New()
+	e.Use(middleware.RequestID())
+	e.Use(middleware.RequestLogger())
+	e.Use(middleware.CORS())
+	e.Use(middleware.Recover())
+
+	rpcGroup := e.Group("")
+	path, connectHandler := apiconnect.NewShreddrServiceHandler(s)
+	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
 
 	// add health check handler
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("howdy!"))
+	e.GET("/health", func(c echo.Context) error {
+		return c.String(http.StatusOK, "howdy!")
+	})
+
+	e.GET("/", func(c echo.Context) error {
+		return c.String(http.StatusOK, "howdy!")
 	})
 
 	p := new(http.Protocols)
 	p.SetHTTP1(true)
 	p.SetUnencryptedHTTP2(true)
 
-	server := &http.Server{
-		Addr:      fmt.Sprintf("%s:%s", address, port),
-		Handler:   mux,
-		Protocols: p,
-	}
-	s.server = server
+	s.e = e
 
 	return s, nil
 }
 
 func (s *Server) Start() error {
-	return s.server.ListenAndServe()
+	return s.e.Start("localhost:8080")
 }
 
 func (s *Server) Stop() error {
-	return s.server.Shutdown(context.Background())
+	return s.e.Shutdown(context.Background())
 }
