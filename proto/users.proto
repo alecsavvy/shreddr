@@ -6,7 +6,7 @@ option go_package = "github.com/alecsavvy/shreddr/server/api";
 
 // User represents a user account
 message User {
-  string id = 1; // numeric id
+  int32 id = 1; // numeric id
   string wallet_address = 2; // Primary Solana wallet address
   string created_at = 3; // ISO 8601 timestamp
   string updated_at = 4; // ISO 8601 timestamp

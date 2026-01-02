@@ -33,7 +33,7 @@ message ListEventsResponse {
 }
 
 message GetEventRequest {
-  string event_id = 1;
+  int32 event_id = 1;
 }
 
 message GetEventResponse {

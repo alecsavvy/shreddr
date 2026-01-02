@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file users.proto.
  */
 export const file_users: GenFile = /*@__PURE__*/
-  fileDesc("Cgt1c2Vycy5wcm90bxIHc2hyZWRkciJSCgRVc2VyEgoKAmlkGAEgASgJEhYKDndhbGxldF9hZGRyZXNzGAIgASgJEhIKCmNyZWF0ZWRfYXQYAyABKAkSEgoKdXBkYXRlZF9hdBgEIAEoCSIhCg5HZXRVc2VyUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJIi4KD0dldFVzZXJSZXNwb25zZRIbCgR1c2VyGAEgASgLMg0uc2hyZWRkci5Vc2VyIjAKFkdldFVzZXJCeVdhbGxldFJlcXVlc3QSFgoOd2FsbGV0X2FkZHJlc3MYASABKAkiNgoXR2V0VXNlckJ5V2FsbGV0UmVzcG9uc2USGwoEdXNlchgBIAEoCzINLnNocmVkZHIuVXNlciI3ChFDcmVhdGVVc2VyUmVxdWVzdBIRCglzaWduYXR1cmUYASABKAkSDwoHYWRkcmVzcxgCIAEoCSIlChJDcmVhdGVVc2VyUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCEIpWidnaXRodWIuY29tL2FsZWNzYXZ2eS9zaHJlZGRyL3NlcnZlci9hcGliBnByb3RvMw");
+  fileDesc("Cgt1c2Vycy5wcm90bxIHc2hyZWRkciJSCgRVc2VyEgoKAmlkGAEgASgFEhYKDndhbGxldF9hZGRyZXNzGAIgASgJEhIKCmNyZWF0ZWRfYXQYAyABKAkSEgoKdXBkYXRlZF9hdBgEIAEoCSIhCg5HZXRVc2VyUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJIi4KD0dldFVzZXJSZXNwb25zZRIbCgR1c2VyGAEgASgLMg0uc2hyZWRkci5Vc2VyIjAKFkdldFVzZXJCeVdhbGxldFJlcXVlc3QSFgoOd2FsbGV0X2FkZHJlc3MYASABKAkiNgoXR2V0VXNlckJ5V2FsbGV0UmVzcG9uc2USGwoEdXNlchgBIAEoCzINLnNocmVkZHIuVXNlciI3ChFDcmVhdGVVc2VyUmVxdWVzdBIRCglzaWduYXR1cmUYASABKAkSDwoHYWRkcmVzcxgCIAEoCSIlChJDcmVhdGVVc2VyUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCEIpWidnaXRodWIuY29tL2FsZWNzYXZ2eS9zaHJlZGRyL3NlcnZlci9hcGliBnByb3RvMw");
 
 /**
  * User represents a user account
@@ -21,9 +21,9 @@ export type User = Message<"shreddr.User"> & {
   /**
    * numeric id
    *
-   * @generated from field: string id = 1;
+   * @generated from field: int32 id = 1;
    */
-  id: string;
+  id: number;
 
   /**
    * Primary Solana wallet address
