@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, Shreddr 🎸")
+	fmt.Println("good morning!")
 
 	s, err := server.NewServer()
 	if err != nil {
