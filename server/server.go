@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -57,7 +58,7 @@ func NewServer() (*Server, error) {
 
 	queries := db.New(pgxConn)
 
-	s := &Server{db: queries}
+	s := &Server{db: queries, address: address, port: port}
 
 	e := echo.New()
 	e.Use(middleware.RequestID())
@@ -78,17 +79,13 @@ func NewServer() (*Server, error) {
 		return c.String(http.StatusOK, "howdy!")
 	})
 
-	p := new(http.Protocols)
-	p.SetHTTP1(true)
-	p.SetUnencryptedHTTP2(true)
-
 	s.e = e
 
 	return s, nil
 }
 
 func (s *Server) Start() error {
-	return s.e.Start("localhost:8080")
+	return s.e.Start(fmt.Sprintf("%s:%s", s.address, s.port))
 }
 
 func (s *Server) Stop() error {
