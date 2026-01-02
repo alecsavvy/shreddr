@@ -22,40 +22,8 @@ export const getEvent = ShreddrService.method.getEvent;
 export const createEvent = ShreddrService.method.createEvent;
 
 /**
- * Tickets
- *
- * @generated from rpc shreddr.ShreddrService.ListTickets
- */
-export const listTickets = ShreddrService.method.listTickets;
-
-/**
- * @generated from rpc shreddr.ShreddrService.GetTicket
- */
-export const getTicket = ShreddrService.method.getTicket;
-
-/**
- * @generated from rpc shreddr.ShreddrService.CreateTicket
- */
-export const createTicket = ShreddrService.method.createTicket;
-
-/**
- * @generated from rpc shreddr.ShreddrService.RedeemTicket
- */
-export const redeemTicket = ShreddrService.method.redeemTicket;
-
-/**
- * @generated from rpc shreddr.ShreddrService.VerifyTicket
- */
-export const verifyTicket = ShreddrService.method.verifyTicket;
-
-/**
  * Users
  *
- * @generated from rpc shreddr.ShreddrService.GetUser
- */
-export const getUser = ShreddrService.method.getUser;
-
-/**
  * @generated from rpc shreddr.ShreddrService.GetUserByWallet
  */
 export const getUserByWallet = ShreddrService.method.getUserByWallet;
@@ -64,25 +32,3 @@ export const getUserByWallet = ShreddrService.method.getUserByWallet;
  * @generated from rpc shreddr.ShreddrService.CreateUser
  */
 export const createUser = ShreddrService.method.createUser;
-
-/**
- * Purchases
- *
- * @generated from rpc shreddr.ShreddrService.CreatePurchase
- */
-export const createPurchase = ShreddrService.method.createPurchase;
-
-/**
- * @generated from rpc shreddr.ShreddrService.GetPurchase
- */
-export const getPurchase = ShreddrService.method.getPurchase;
-
-/**
- * @generated from rpc shreddr.ShreddrService.UpdatePurchaseStatus
- */
-export const updatePurchaseStatus = ShreddrService.method.updatePurchaseStatus;
-
-/**
- * @generated from rpc shreddr.ShreddrService.ListPurchases
- */
-export const listPurchases = ShreddrService.method.listPurchases;

@@ -6,7 +6,7 @@ option go_package = "github.com/alecsavvy/shreddr/server/api";
 
 // User represents a user account
 message User {
-  string id = 1; // Phantom auth user ID
+  string id = 1; // numeric id
   string wallet_address = 2; // Primary Solana wallet address
   string created_at = 3; // ISO 8601 timestamp
   string updated_at = 4; // ISO 8601 timestamp
@@ -29,10 +29,13 @@ message GetUserByWalletResponse {
 }
 
 message CreateUserRequest {
-  string user_id = 1; // Phantom auth user ID
-  string wallet_address = 2; // Solana wallet address
+  // Signed message from Phantom Connect that contains the public key
+  // Used to verify the public key is owned by the user
+  string signature = 1;
+  // Solana ED25519 public key, must match the signature
+  string address = 2;
 }
 
 message CreateUserResponse {
-  User user = 1;
+  bool success = 1;
 }

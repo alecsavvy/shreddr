@@ -4,15 +4,21 @@ package shreddr;
 
 option go_package = "github.com/alecsavvy/shreddr/server/api";
 
+message Location {
+  double latitude = 1;
+  double longitude = 2;
+}
+
 // Event represents a music event or show
 message Event {
-  string id = 1;
+  int32 id = 1;
   string name = 2;
   string date = 3; // ISO 8601 timestamp
-  string venue = 4;
+  Location location = 4;
   string description = 5;
-  int64 price_cents = 6; // Price in cents
-  string image_url = 7; // Optional image URL
+  string creator_address = 6;
+  int64 price_cents = 7; // Price in cents
+  string image_url = 8; // Optional image URL
 }
 
 message ListEventsRequest {
@@ -35,12 +41,7 @@ message GetEventResponse {
 }
 
 message CreateEventRequest {
-  string name = 1;
-  string date = 2; // ISO 8601 timestamp
-  string venue = 3;
-  string description = 4;
-  int64 price_cents = 5;
-  string image_url = 6;
+  Event event = 1;
 }
 
 message CreateEventResponse {

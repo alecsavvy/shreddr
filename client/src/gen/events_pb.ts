@@ -10,7 +10,29 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file events.proto.
  */
 export const file_events: GenFile = /*@__PURE__*/
-  fileDesc("CgxldmVudHMucHJvdG8SB3NocmVkZHIiewoFRXZlbnQSCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRkYXRlGAMgASgJEg0KBXZlbnVlGAQgASgJEhMKC2Rlc2NyaXB0aW9uGAUgASgJEhMKC3ByaWNlX2NlbnRzGAYgASgDEhEKCWltYWdlX3VybBgHIAEoCSJJChFMaXN0RXZlbnRzUmVxdWVzdBIQCghsb2NhdGlvbhgBIAEoCRIRCglkYXRlX2Zyb20YAiABKAkSDwoHZGF0ZV90bxgDIAEoCSI0ChJMaXN0RXZlbnRzUmVzcG9uc2USHgoGZXZlbnRzGAEgAygLMg4uc2hyZWRkci5FdmVudCIjCg9HZXRFdmVudFJlcXVlc3QSEAoIZXZlbnRfaWQYASABKAkiMQoQR2V0RXZlbnRSZXNwb25zZRIdCgVldmVudBgBIAEoCzIOLnNocmVkZHIuRXZlbnQifAoSQ3JlYXRlRXZlbnRSZXF1ZXN0EgwKBG5hbWUYASABKAkSDAoEZGF0ZRgCIAEoCRINCgV2ZW51ZRgDIAEoCRITCgtkZXNjcmlwdGlvbhgEIAEoCRITCgtwcmljZV9jZW50cxgFIAEoAxIRCglpbWFnZV91cmwYBiABKAkiNAoTQ3JlYXRlRXZlbnRSZXNwb25zZRIdCgVldmVudBgBIAEoCzIOLnNocmVkZHIuRXZlbnRCKVonZ2l0aHViLmNvbS9hbGVjc2F2dnkvc2hyZWRkci9zZXJ2ZXIvYXBpYgZwcm90bzM");
+  fileDesc("CgxldmVudHMucHJvdG8SB3NocmVkZHIiLwoITG9jYXRpb24SEAoIbGF0aXR1ZGUYASABKAESEQoJbG9uZ2l0dWRlGAIgASgBIqoBCgVFdmVudBIKCgJpZBgBIAEoBRIMCgRuYW1lGAIgASgJEgwKBGRhdGUYAyABKAkSIwoIbG9jYXRpb24YBCABKAsyES5zaHJlZGRyLkxvY2F0aW9uEhMKC2Rlc2NyaXB0aW9uGAUgASgJEhcKD2NyZWF0b3JfYWRkcmVzcxgGIAEoCRITCgtwcmljZV9jZW50cxgHIAEoAxIRCglpbWFnZV91cmwYCCABKAkiSQoRTGlzdEV2ZW50c1JlcXVlc3QSEAoIbG9jYXRpb24YASABKAkSEQoJZGF0ZV9mcm9tGAIgASgJEg8KB2RhdGVfdG8YAyABKAkiNAoSTGlzdEV2ZW50c1Jlc3BvbnNlEh4KBmV2ZW50cxgBIAMoCzIOLnNocmVkZHIuRXZlbnQiIwoPR2V0RXZlbnRSZXF1ZXN0EhAKCGV2ZW50X2lkGAEgASgJIjEKEEdldEV2ZW50UmVzcG9uc2USHQoFZXZlbnQYASABKAsyDi5zaHJlZGRyLkV2ZW50IjMKEkNyZWF0ZUV2ZW50UmVxdWVzdBIdCgVldmVudBgBIAEoCzIOLnNocmVkZHIuRXZlbnQiNAoTQ3JlYXRlRXZlbnRSZXNwb25zZRIdCgVldmVudBgBIAEoCzIOLnNocmVkZHIuRXZlbnRCKVonZ2l0aHViLmNvbS9hbGVjc2F2dnkvc2hyZWRkci9zZXJ2ZXIvYXBpYgZwcm90bzM");
+
+/**
+ * @generated from message shreddr.Location
+ */
+export type Location = Message<"shreddr.Location"> & {
+  /**
+   * @generated from field: double latitude = 1;
+   */
+  latitude: number;
+
+  /**
+   * @generated from field: double longitude = 2;
+   */
+  longitude: number;
+};
+
+/**
+ * Describes the message shreddr.Location.
+ * Use `create(LocationSchema)` to create a new message.
+ */
+export const LocationSchema: GenMessage<Location> = /*@__PURE__*/
+  messageDesc(file_events, 0);
 
 /**
  * Event represents a music event or show
@@ -19,9 +41,9 @@ export const file_events: GenFile = /*@__PURE__*/
  */
 export type Event = Message<"shreddr.Event"> & {
   /**
-   * @generated from field: string id = 1;
+   * @generated from field: int32 id = 1;
    */
-  id: string;
+  id: number;
 
   /**
    * @generated from field: string name = 2;
@@ -36,9 +58,9 @@ export type Event = Message<"shreddr.Event"> & {
   date: string;
 
   /**
-   * @generated from field: string venue = 4;
+   * @generated from field: shreddr.Location location = 4;
    */
-  venue: string;
+  location?: Location;
 
   /**
    * @generated from field: string description = 5;
@@ -46,16 +68,21 @@ export type Event = Message<"shreddr.Event"> & {
   description: string;
 
   /**
+   * @generated from field: string creator_address = 6;
+   */
+  creatorAddress: string;
+
+  /**
    * Price in cents
    *
-   * @generated from field: int64 price_cents = 6;
+   * @generated from field: int64 price_cents = 7;
    */
   priceCents: bigint;
 
   /**
    * Optional image URL
    *
-   * @generated from field: string image_url = 7;
+   * @generated from field: string image_url = 8;
    */
   imageUrl: string;
 };
@@ -65,7 +92,7 @@ export type Event = Message<"shreddr.Event"> & {
  * Use `create(EventSchema)` to create a new message.
  */
 export const EventSchema: GenMessage<Event> = /*@__PURE__*/
-  messageDesc(file_events, 0);
+  messageDesc(file_events, 1);
 
 /**
  * @generated from message shreddr.ListEventsRequest
@@ -100,7 +127,7 @@ export type ListEventsRequest = Message<"shreddr.ListEventsRequest"> & {
  * Use `create(ListEventsRequestSchema)` to create a new message.
  */
 export const ListEventsRequestSchema: GenMessage<ListEventsRequest> = /*@__PURE__*/
-  messageDesc(file_events, 1);
+  messageDesc(file_events, 2);
 
 /**
  * @generated from message shreddr.ListEventsResponse
@@ -117,7 +144,7 @@ export type ListEventsResponse = Message<"shreddr.ListEventsResponse"> & {
  * Use `create(ListEventsResponseSchema)` to create a new message.
  */
 export const ListEventsResponseSchema: GenMessage<ListEventsResponse> = /*@__PURE__*/
-  messageDesc(file_events, 2);
+  messageDesc(file_events, 3);
 
 /**
  * @generated from message shreddr.GetEventRequest
@@ -134,7 +161,7 @@ export type GetEventRequest = Message<"shreddr.GetEventRequest"> & {
  * Use `create(GetEventRequestSchema)` to create a new message.
  */
 export const GetEventRequestSchema: GenMessage<GetEventRequest> = /*@__PURE__*/
-  messageDesc(file_events, 3);
+  messageDesc(file_events, 4);
 
 /**
  * @generated from message shreddr.GetEventResponse
@@ -151,43 +178,16 @@ export type GetEventResponse = Message<"shreddr.GetEventResponse"> & {
  * Use `create(GetEventResponseSchema)` to create a new message.
  */
 export const GetEventResponseSchema: GenMessage<GetEventResponse> = /*@__PURE__*/
-  messageDesc(file_events, 4);
+  messageDesc(file_events, 5);
 
 /**
  * @generated from message shreddr.CreateEventRequest
  */
 export type CreateEventRequest = Message<"shreddr.CreateEventRequest"> & {
   /**
-   * @generated from field: string name = 1;
+   * @generated from field: shreddr.Event event = 1;
    */
-  name: string;
-
-  /**
-   * ISO 8601 timestamp
-   *
-   * @generated from field: string date = 2;
-   */
-  date: string;
-
-  /**
-   * @generated from field: string venue = 3;
-   */
-  venue: string;
-
-  /**
-   * @generated from field: string description = 4;
-   */
-  description: string;
-
-  /**
-   * @generated from field: int64 price_cents = 5;
-   */
-  priceCents: bigint;
-
-  /**
-   * @generated from field: string image_url = 6;
-   */
-  imageUrl: string;
+  event?: Event;
 };
 
 /**
@@ -195,7 +195,7 @@ export type CreateEventRequest = Message<"shreddr.CreateEventRequest"> & {
  * Use `create(CreateEventRequestSchema)` to create a new message.
  */
 export const CreateEventRequestSchema: GenMessage<CreateEventRequest> = /*@__PURE__*/
-  messageDesc(file_events, 5);
+  messageDesc(file_events, 6);
 
 /**
  * @generated from message shreddr.CreateEventResponse
@@ -212,5 +212,5 @@ export type CreateEventResponse = Message<"shreddr.CreateEventResponse"> & {
  * Use `create(CreateEventResponseSchema)` to create a new message.
  */
 export const CreateEventResponseSchema: GenMessage<CreateEventResponse> = /*@__PURE__*/
-  messageDesc(file_events, 6);
+  messageDesc(file_events, 7);
 

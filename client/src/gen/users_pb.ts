@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file users.proto.
  */
 export const file_users: GenFile = /*@__PURE__*/
-  fileDesc("Cgt1c2Vycy5wcm90bxIHc2hyZWRkciJSCgRVc2VyEgoKAmlkGAEgASgJEhYKDndhbGxldF9hZGRyZXNzGAIgASgJEhIKCmNyZWF0ZWRfYXQYAyABKAkSEgoKdXBkYXRlZF9hdBgEIAEoCSIhCg5HZXRVc2VyUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJIi4KD0dldFVzZXJSZXNwb25zZRIbCgR1c2VyGAEgASgLMg0uc2hyZWRkci5Vc2VyIjAKFkdldFVzZXJCeVdhbGxldFJlcXVlc3QSFgoOd2FsbGV0X2FkZHJlc3MYASABKAkiNgoXR2V0VXNlckJ5V2FsbGV0UmVzcG9uc2USGwoEdXNlchgBIAEoCzINLnNocmVkZHIuVXNlciI8ChFDcmVhdGVVc2VyUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhYKDndhbGxldF9hZGRyZXNzGAIgASgJIjEKEkNyZWF0ZVVzZXJSZXNwb25zZRIbCgR1c2VyGAEgASgLMg0uc2hyZWRkci5Vc2VyQilaJ2dpdGh1Yi5jb20vYWxlY3NhdnZ5L3NocmVkZHIvc2VydmVyL2FwaWIGcHJvdG8z");
+  fileDesc("Cgt1c2Vycy5wcm90bxIHc2hyZWRkciJSCgRVc2VyEgoKAmlkGAEgASgJEhYKDndhbGxldF9hZGRyZXNzGAIgASgJEhIKCmNyZWF0ZWRfYXQYAyABKAkSEgoKdXBkYXRlZF9hdBgEIAEoCSIhCg5HZXRVc2VyUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJIi4KD0dldFVzZXJSZXNwb25zZRIbCgR1c2VyGAEgASgLMg0uc2hyZWRkci5Vc2VyIjAKFkdldFVzZXJCeVdhbGxldFJlcXVlc3QSFgoOd2FsbGV0X2FkZHJlc3MYASABKAkiNgoXR2V0VXNlckJ5V2FsbGV0UmVzcG9uc2USGwoEdXNlchgBIAEoCzINLnNocmVkZHIuVXNlciI3ChFDcmVhdGVVc2VyUmVxdWVzdBIRCglzaWduYXR1cmUYASABKAkSDwoHYWRkcmVzcxgCIAEoCSIlChJDcmVhdGVVc2VyUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCEIpWidnaXRodWIuY29tL2FsZWNzYXZ2eS9zaHJlZGRyL3NlcnZlci9hcGliBnByb3RvMw");
 
 /**
  * User represents a user account
@@ -19,7 +19,7 @@ export const file_users: GenFile = /*@__PURE__*/
  */
 export type User = Message<"shreddr.User"> & {
   /**
-   * Phantom auth user ID
+   * numeric id
    *
    * @generated from field: string id = 1;
    */
@@ -127,18 +127,19 @@ export const GetUserByWalletResponseSchema: GenMessage<GetUserByWalletResponse> 
  */
 export type CreateUserRequest = Message<"shreddr.CreateUserRequest"> & {
   /**
-   * Phantom auth user ID
+   * Signed message from Phantom Connect that contains the public key
+   * Used to verify the public key is owned by the user
    *
-   * @generated from field: string user_id = 1;
+   * @generated from field: string signature = 1;
    */
-  userId: string;
+  signature: string;
 
   /**
-   * Solana wallet address
+   * Solana ED25519 public key, must match the signature
    *
-   * @generated from field: string wallet_address = 2;
+   * @generated from field: string address = 2;
    */
-  walletAddress: string;
+  address: string;
 };
 
 /**
@@ -153,9 +154,9 @@ export const CreateUserRequestSchema: GenMessage<CreateUserRequest> = /*@__PURE_
  */
 export type CreateUserResponse = Message<"shreddr.CreateUserResponse"> & {
   /**
-   * @generated from field: shreddr.User user = 1;
+   * @generated from field: bool success = 1;
    */
-  user?: User;
+  success: boolean;
 };
 
 /**
