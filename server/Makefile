@@ -1,15 +1,5 @@
-deps:
-	echo "Installing dependencies..."
-
-build:
-	echo "Building server..."
-
-	go build -o bin/app cmd/app/main.go
-
 run:
-	echo "Running server..."
+	go run cmd/app/main.go
 
-	bin/app
-
-dev:
-	air
+pg:
+	docker run -d --name shreddr-pg -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=shreddr postgres:17

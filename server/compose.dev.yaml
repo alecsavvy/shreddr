@@ -1,0 +1,11 @@
+services:
+  db:
+    # connection string: postgres://postgres:postgres@localhost:5432/shreddr?sslmode=disable
+    image: postgis/postgis:17-3.4
+    container_name: shreddr-pg
+    environment:
+      POSTGRES_DB: shreddr
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
