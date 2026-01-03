@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "github.com/alecsavvy/shreddr/server/api";
+
+service AuthService {
+  rpc Authenticate(AuthenticateRequest) returns (AuthenticateResponse);
+}
+
+message AuthenticateRequest {
+  string public_key = 1;
+  string signature = 2;
+}
+
+message AuthenticateResponse {
+  string jwt = 1;
+}
+
+message AuthHeader {
+  string jwt = 1;
+}

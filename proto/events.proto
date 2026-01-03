@@ -1,8 +1,16 @@
 syntax = "proto3";
 
-package shreddr;
+package api;
+
+import "auth.proto";
 
 option go_package = "github.com/alecsavvy/shreddr/server/api";
+
+service EventService {
+  rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse);
+  rpc CreateEvent(CreateEventRequest) returns (CreateEventResponse);
+}
 
 message Location {
   double latitude = 1;

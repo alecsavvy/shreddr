@@ -10,10 +10,10 @@ import (
 )
 
 const getEvent = `-- name: GetEvent :one
-select id, name, description, date, location, creator_address, price_cents, image_url, created_at, updated_at from events where id = $1
+select id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at from events where id = $1
 `
 
-func (q *Queries) GetEvent(ctx context.Context, id int32) (Event, error) {
+func (q *Queries) GetEvent(ctx context.Context, id string) (*Event, error) {
 	row := q.db.QueryRow(ctx, getEvent, id)
 	var i Event
 	err := row.Scan(
@@ -21,43 +21,60 @@ func (q *Queries) GetEvent(ctx context.Context, id int32) (Event, error) {
 		&i.Name,
 		&i.Description,
 		&i.Date,
-		&i.Location,
-		&i.CreatorAddress,
+		&i.VenueID,
 		&i.PriceCents,
 		&i.ImageUrl,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
-const getUserByWallet = `-- name: GetUserByWallet :one
-select id, wallet_address, created_at, updated_at from users where wallet_address = $1
+const getUser = `-- name: GetUser :one
+select public_key, created_at, updated_at from users where public_key = $1
 `
 
-func (q *Queries) GetUserByWallet(ctx context.Context, walletAddress string) (User, error) {
-	row := q.db.QueryRow(ctx, getUserByWallet, walletAddress)
+func (q *Queries) GetUser(ctx context.Context, publicKey string) (*User, error) {
+	row := q.db.QueryRow(ctx, getUser, publicKey)
 	var i User
+	err := row.Scan(&i.PublicKey, &i.CreatedAt, &i.UpdatedAt)
+	return &i, err
+}
+
+const getVenue = `-- name: GetVenue :one
+select id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at from venues where id = $1
+`
+
+func (q *Queries) GetVenue(ctx context.Context, id string) (*Venue, error) {
+	row := q.db.QueryRow(ctx, getVenue, id)
+	var i Venue
 	err := row.Scan(
 		&i.ID,
-		&i.WalletAddress,
+		&i.Name,
+		&i.Description,
+		&i.Latitude,
+		&i.Longitude,
+		&i.Country,
+		&i.Region,
+		&i.City,
+		&i.Capacity,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
 const listEvents = `-- name: ListEvents :many
-select id, name, description, date, location, creator_address, price_cents, image_url, created_at, updated_at from events
+select id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at from events
 `
 
-func (q *Queries) ListEvents(ctx context.Context) ([]Event, error) {
+func (q *Queries) ListEvents(ctx context.Context) ([]*Event, error) {
 	rows, err := q.db.Query(ctx, listEvents)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Event
+	items := []*Event{}
 	for rows.Next() {
 		var i Event
 		if err := rows.Scan(
@@ -65,8 +82,7 @@ func (q *Queries) ListEvents(ctx context.Context) ([]Event, error) {
 			&i.Name,
 			&i.Description,
 			&i.Date,
-			&i.Location,
-			&i.CreatorAddress,
+			&i.VenueID,
 			&i.PriceCents,
 			&i.ImageUrl,
 			&i.CreatedAt,
@@ -74,7 +90,43 @@ func (q *Queries) ListEvents(ctx context.Context) ([]Event, error) {
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listVenues = `-- name: ListVenues :many
+select id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at from venues
+`
+
+func (q *Queries) ListVenues(ctx context.Context) ([]*Venue, error) {
+	rows, err := q.db.Query(ctx, listVenues)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []*Venue{}
+	for rows.Next() {
+		var i Venue
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.Latitude,
+			&i.Longitude,
+			&i.Country,
+			&i.Region,
+			&i.City,
+			&i.Capacity,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

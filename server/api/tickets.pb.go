@@ -20,111 +20,22 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// TicketPayload contains the core ticket data before signing
-type TicketPayload struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	EventId     string `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
-	EventName   string `protobuf:"bytes,2,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
-	EventDate   string `protobuf:"bytes,3,opt,name=event_date,json=eventDate,proto3" json:"event_date,omitempty"` // ISO 8601 timestamp
-	TicketId    string `protobuf:"bytes,4,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
-	PurchasedAt string `protobuf:"bytes,5,opt,name=purchased_at,json=purchasedAt,proto3" json:"purchased_at,omitempty"` // ISO 8601 timestamp
-	OwnerWallet string `protobuf:"bytes,6,opt,name=owner_wallet,json=ownerWallet,proto3" json:"owner_wallet,omitempty"` // Solana wallet address
-}
-
-func (x *TicketPayload) Reset() {
-	*x = TicketPayload{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *TicketPayload) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TicketPayload) ProtoMessage() {}
-
-func (x *TicketPayload) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TicketPayload.ProtoReflect.Descriptor instead.
-func (*TicketPayload) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *TicketPayload) GetEventId() string {
-	if x != nil {
-		return x.EventId
-	}
-	return ""
-}
-
-func (x *TicketPayload) GetEventName() string {
-	if x != nil {
-		return x.EventName
-	}
-	return ""
-}
-
-func (x *TicketPayload) GetEventDate() string {
-	if x != nil {
-		return x.EventDate
-	}
-	return ""
-}
-
-func (x *TicketPayload) GetTicketId() string {
-	if x != nil {
-		return x.TicketId
-	}
-	return ""
-}
-
-func (x *TicketPayload) GetPurchasedAt() string {
-	if x != nil {
-		return x.PurchasedAt
-	}
-	return ""
-}
-
-func (x *TicketPayload) GetOwnerWallet() string {
-	if x != nil {
-		return x.OwnerWallet
-	}
-	return ""
-}
-
-// Ticket represents a signed, redeemable ticket
 type Ticket struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Payload    *TicketPayload `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
-	Signature  string         `protobuf:"bytes,2,opt,name=signature,proto3" json:"signature,omitempty"`                  // Base64 encoded signature
-	PublicKey  string         `protobuf:"bytes,3,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"` // Base58 encoded public key
-	Redeemed   bool           `protobuf:"varint,4,opt,name=redeemed,proto3" json:"redeemed,omitempty"`
-	RedeemedAt string         `protobuf:"bytes,5,opt,name=redeemed_at,json=redeemedAt,proto3" json:"redeemed_at,omitempty"` // ISO 8601 timestamp, optional
+	Id        string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	EventId   string `protobuf:"bytes,2,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	PublicKey string `protobuf:"bytes,3,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
+	CreatedAt string `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt string `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
 
 func (x *Ticket) Reset() {
 	*x = Ticket{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[1]
+		mi := &file_tickets_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -137,7 +48,7 @@ func (x *Ticket) String() string {
 func (*Ticket) ProtoMessage() {}
 
 func (x *Ticket) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[1]
+	mi := &file_tickets_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -150,19 +61,19 @@ func (x *Ticket) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ticket.ProtoReflect.Descriptor instead.
 func (*Ticket) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{1}
+	return file_tickets_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Ticket) GetPayload() *TicketPayload {
+func (x *Ticket) GetId() string {
 	if x != nil {
-		return x.Payload
+		return x.Id
 	}
-	return nil
+	return ""
 }
 
-func (x *Ticket) GetSignature() string {
+func (x *Ticket) GetEventId() string {
 	if x != nil {
-		return x.Signature
+		return x.EventId
 	}
 	return ""
 }
@@ -174,128 +85,18 @@ func (x *Ticket) GetPublicKey() string {
 	return ""
 }
 
-func (x *Ticket) GetRedeemed() bool {
+func (x *Ticket) GetCreatedAt() string {
 	if x != nil {
-		return x.Redeemed
-	}
-	return false
-}
-
-func (x *Ticket) GetRedeemedAt() string {
-	if x != nil {
-		return x.RedeemedAt
+		return x.CreatedAt
 	}
 	return ""
 }
 
-type ListTicketsRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	UserId          string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                             // Phantom auth user ID
-	EventId         string `protobuf:"bytes,2,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`                          // Optional: filter by event
-	IncludeRedeemed bool   `protobuf:"varint,3,opt,name=include_redeemed,json=includeRedeemed,proto3" json:"include_redeemed,omitempty"` // Include redeemed tickets
-}
-
-func (x *ListTicketsRequest) Reset() {
-	*x = ListTicketsRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[2]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ListTicketsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListTicketsRequest) ProtoMessage() {}
-
-func (x *ListTicketsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListTicketsRequest.ProtoReflect.Descriptor instead.
-func (*ListTicketsRequest) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *ListTicketsRequest) GetUserId() string {
+func (x *Ticket) GetUpdatedAt() string {
 	if x != nil {
-		return x.UserId
+		return x.UpdatedAt
 	}
 	return ""
-}
-
-func (x *ListTicketsRequest) GetEventId() string {
-	if x != nil {
-		return x.EventId
-	}
-	return ""
-}
-
-func (x *ListTicketsRequest) GetIncludeRedeemed() bool {
-	if x != nil {
-		return x.IncludeRedeemed
-	}
-	return false
-}
-
-type ListTicketsResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Tickets []*Ticket `protobuf:"bytes,1,rep,name=tickets,proto3" json:"tickets,omitempty"`
-}
-
-func (x *ListTicketsResponse) Reset() {
-	*x = ListTicketsResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[3]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ListTicketsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListTicketsResponse) ProtoMessage() {}
-
-func (x *ListTicketsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[3]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListTicketsResponse.ProtoReflect.Descriptor instead.
-func (*ListTicketsResponse) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *ListTicketsResponse) GetTickets() []*Ticket {
-	if x != nil {
-		return x.Tickets
-	}
-	return nil
 }
 
 type GetTicketRequest struct {
@@ -303,13 +104,14 @@ type GetTicketRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TicketId string `protobuf:"bytes,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
+	AuthHeader *AuthHeader `protobuf:"bytes,1,opt,name=auth_header,json=authHeader,proto3" json:"auth_header,omitempty"`
+	EventId    string      `protobuf:"bytes,2,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
 }
 
 func (x *GetTicketRequest) Reset() {
 	*x = GetTicketRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[4]
+		mi := &file_tickets_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -322,7 +124,7 @@ func (x *GetTicketRequest) String() string {
 func (*GetTicketRequest) ProtoMessage() {}
 
 func (x *GetTicketRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[4]
+	mi := &file_tickets_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -335,12 +137,19 @@ func (x *GetTicketRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTicketRequest.ProtoReflect.Descriptor instead.
 func (*GetTicketRequest) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{4}
+	return file_tickets_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetTicketRequest) GetTicketId() string {
+func (x *GetTicketRequest) GetAuthHeader() *AuthHeader {
 	if x != nil {
-		return x.TicketId
+		return x.AuthHeader
+	}
+	return nil
+}
+
+func (x *GetTicketRequest) GetEventId() string {
+	if x != nil {
+		return x.EventId
 	}
 	return ""
 }
@@ -356,7 +165,7 @@ type GetTicketResponse struct {
 func (x *GetTicketResponse) Reset() {
 	*x = GetTicketResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[5]
+		mi := &file_tickets_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -369,7 +178,7 @@ func (x *GetTicketResponse) String() string {
 func (*GetTicketResponse) ProtoMessage() {}
 
 func (x *GetTicketResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[5]
+	mi := &file_tickets_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -382,7 +191,7 @@ func (x *GetTicketResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTicketResponse.ProtoReflect.Descriptor instead.
 func (*GetTicketResponse) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{5}
+	return file_tickets_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetTicketResponse) GetTicket() *Ticket {
@@ -392,420 +201,38 @@ func (x *GetTicketResponse) GetTicket() *Ticket {
 	return nil
 }
 
-type CreateTicketRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	EventId     string `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
-	OwnerWallet string `protobuf:"bytes,2,opt,name=owner_wallet,json=ownerWallet,proto3" json:"owner_wallet,omitempty"` // Solana wallet address
-	PurchaseId  string `protobuf:"bytes,3,opt,name=purchase_id,json=purchaseId,proto3" json:"purchase_id,omitempty"`    // Reference to purchase record
-}
-
-func (x *CreateTicketRequest) Reset() {
-	*x = CreateTicketRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CreateTicketRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateTicketRequest) ProtoMessage() {}
-
-func (x *CreateTicketRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateTicketRequest.ProtoReflect.Descriptor instead.
-func (*CreateTicketRequest) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *CreateTicketRequest) GetEventId() string {
-	if x != nil {
-		return x.EventId
-	}
-	return ""
-}
-
-func (x *CreateTicketRequest) GetOwnerWallet() string {
-	if x != nil {
-		return x.OwnerWallet
-	}
-	return ""
-}
-
-func (x *CreateTicketRequest) GetPurchaseId() string {
-	if x != nil {
-		return x.PurchaseId
-	}
-	return ""
-}
-
-type CreateTicketResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Ticket *Ticket `protobuf:"bytes,1,opt,name=ticket,proto3" json:"ticket,omitempty"`
-}
-
-func (x *CreateTicketResponse) Reset() {
-	*x = CreateTicketResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[7]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CreateTicketResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateTicketResponse) ProtoMessage() {}
-
-func (x *CreateTicketResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[7]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateTicketResponse.ProtoReflect.Descriptor instead.
-func (*CreateTicketResponse) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *CreateTicketResponse) GetTicket() *Ticket {
-	if x != nil {
-		return x.Ticket
-	}
-	return nil
-}
-
-type RedeemTicketRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	TicketId   string `protobuf:"bytes,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
-	RedeemedBy string `protobuf:"bytes,2,opt,name=redeemed_by,json=redeemedBy,proto3" json:"redeemed_by,omitempty"` // User ID or wallet address of redeemer
-}
-
-func (x *RedeemTicketRequest) Reset() {
-	*x = RedeemTicketRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[8]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RedeemTicketRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RedeemTicketRequest) ProtoMessage() {}
-
-func (x *RedeemTicketRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[8]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RedeemTicketRequest.ProtoReflect.Descriptor instead.
-func (*RedeemTicketRequest) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *RedeemTicketRequest) GetTicketId() string {
-	if x != nil {
-		return x.TicketId
-	}
-	return ""
-}
-
-func (x *RedeemTicketRequest) GetRedeemedBy() string {
-	if x != nil {
-		return x.RedeemedBy
-	}
-	return ""
-}
-
-type RedeemTicketResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Ticket *Ticket `protobuf:"bytes,1,opt,name=ticket,proto3" json:"ticket,omitempty"`
-}
-
-func (x *RedeemTicketResponse) Reset() {
-	*x = RedeemTicketResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[9]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RedeemTicketResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RedeemTicketResponse) ProtoMessage() {}
-
-func (x *RedeemTicketResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[9]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RedeemTicketResponse.ProtoReflect.Descriptor instead.
-func (*RedeemTicketResponse) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *RedeemTicketResponse) GetTicket() *Ticket {
-	if x != nil {
-		return x.Ticket
-	}
-	return nil
-}
-
-type VerifyTicketRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	TicketId  string `protobuf:"bytes,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
-	Signature string `protobuf:"bytes,2,opt,name=signature,proto3" json:"signature,omitempty"` // Optional: verify signature
-}
-
-func (x *VerifyTicketRequest) Reset() {
-	*x = VerifyTicketRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[10]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *VerifyTicketRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VerifyTicketRequest) ProtoMessage() {}
-
-func (x *VerifyTicketRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[10]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VerifyTicketRequest.ProtoReflect.Descriptor instead.
-func (*VerifyTicketRequest) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *VerifyTicketRequest) GetTicketId() string {
-	if x != nil {
-		return x.TicketId
-	}
-	return ""
-}
-
-func (x *VerifyTicketRequest) GetSignature() string {
-	if x != nil {
-		return x.Signature
-	}
-	return ""
-}
-
-type VerifyTicketResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Valid  bool    `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
-	Ticket *Ticket `protobuf:"bytes,2,opt,name=ticket,proto3" json:"ticket,omitempty"` // Ticket if valid
-	Error  string  `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`   // Error message if invalid
-}
-
-func (x *VerifyTicketResponse) Reset() {
-	*x = VerifyTicketResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_tickets_proto_msgTypes[11]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *VerifyTicketResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VerifyTicketResponse) ProtoMessage() {}
-
-func (x *VerifyTicketResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_tickets_proto_msgTypes[11]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VerifyTicketResponse.ProtoReflect.Descriptor instead.
-func (*VerifyTicketResponse) Descriptor() ([]byte, []int) {
-	return file_tickets_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *VerifyTicketResponse) GetValid() bool {
-	if x != nil {
-		return x.Valid
-	}
-	return false
-}
-
-func (x *VerifyTicketResponse) GetTicket() *Ticket {
-	if x != nil {
-		return x.Ticket
-	}
-	return nil
-}
-
-func (x *VerifyTicketResponse) GetError() string {
-	if x != nil {
-		return x.Error
-	}
-	return ""
-}
-
 var File_tickets_proto protoreflect.FileDescriptor
 
 var file_tickets_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x07, 0x73, 0x68, 0x72, 0x65, 0x64, 0x64, 0x72, 0x22, 0xcb, 0x01, 0x0a, 0x0d, 0x54, 0x69, 0x63,
-	0x6b, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76,
-	0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x65, 0x76,
-	0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x6e,
-	0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65, 0x76, 0x65, 0x6e, 0x74,
-	0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x64, 0x61,
-	0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x44,
-	0x61, 0x74, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x5f, 0x69, 0x64,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x49, 0x64,
-	0x12, 0x21, 0x0a, 0x0c, 0x70, 0x75, 0x72, 0x63, 0x68, 0x61, 0x73, 0x65, 0x64, 0x5f, 0x61, 0x74,
-	0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x75, 0x72, 0x63, 0x68, 0x61, 0x73, 0x65,
-	0x64, 0x41, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x5f, 0x77, 0x61, 0x6c,
-	0x6c, 0x65, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6f, 0x77, 0x6e, 0x65, 0x72,
-	0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x22, 0xb4, 0x01, 0x0a, 0x06, 0x54, 0x69, 0x63, 0x6b, 0x65,
-	0x74, 0x12, 0x30, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x16, 0x2e, 0x73, 0x68, 0x72, 0x65, 0x64, 0x64, 0x72, 0x2e, 0x54, 0x69, 0x63,
-	0x6b, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x07, 0x70, 0x61, 0x79, 0x6c,
-	0x6f, 0x61, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72,
-	0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x5f, 0x6b, 0x65, 0x79, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79,
-	0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01,
-	0x28, 0x08, 0x52, 0x08, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x65, 0x64, 0x12, 0x1f, 0x0a, 0x0b,
-	0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x0a, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x65, 0x64, 0x41, 0x74, 0x22, 0x73, 0x0a,
-	0x12, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x19, 0x0a, 0x08,
-	0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
-	0x65, 0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x29, 0x0a, 0x10, 0x69, 0x6e, 0x63, 0x6c, 0x75,
-	0x64, 0x65, 0x5f, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x08, 0x52, 0x0f, 0x69, 0x6e, 0x63, 0x6c, 0x75, 0x64, 0x65, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d,
-	0x65, 0x64, 0x22, 0x40, 0x0a, 0x13, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29, 0x0a, 0x07, 0x74, 0x69, 0x63,
-	0x6b, 0x65, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x73, 0x68, 0x72,
-	0x65, 0x64, 0x64, 0x72, 0x2e, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x07, 0x74, 0x69, 0x63,
-	0x6b, 0x65, 0x74, 0x73, 0x22, 0x2f, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x65,
-	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x69, 0x63, 0x6b,
-	0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x69, 0x63,
-	0x6b, 0x65, 0x74, 0x49, 0x64, 0x22, 0x3c, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x54, 0x69, 0x63, 0x6b,
-	0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x27, 0x0a, 0x06, 0x74, 0x69,
-	0x63, 0x6b, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x73, 0x68, 0x72,
-	0x65, 0x64, 0x64, 0x72, 0x2e, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x06, 0x74, 0x69, 0x63,
-	0x6b, 0x65, 0x74, 0x22, 0x74, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x63,
-	0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76,
-	0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x65, 0x76,
-	0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x5f, 0x77,
-	0x61, 0x6c, 0x6c, 0x65, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6f, 0x77, 0x6e,
-	0x65, 0x72, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x75, 0x72, 0x63,
-	0x68, 0x61, 0x73, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x70,
-	0x75, 0x72, 0x63, 0x68, 0x61, 0x73, 0x65, 0x49, 0x64, 0x22, 0x3f, 0x0a, 0x14, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x27, 0x0a, 0x06, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x0f, 0x2e, 0x73, 0x68, 0x72, 0x65, 0x64, 0x64, 0x72, 0x2e, 0x54, 0x69, 0x63, 0x6b,
-	0x65, 0x74, 0x52, 0x06, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x22, 0x53, 0x0a, 0x13, 0x52, 0x65,
-	0x64, 0x65, 0x65, 0x6d, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x49, 0x64, 0x12, 0x1f,
-	0x0a, 0x0b, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x65, 0x64, 0x5f, 0x62, 0x79, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0a, 0x72, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x65, 0x64, 0x42, 0x79, 0x22,
-	0x3f, 0x0a, 0x14, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x27, 0x0a, 0x06, 0x74, 0x69, 0x63, 0x6b, 0x65,
-	0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x73, 0x68, 0x72, 0x65, 0x64, 0x64,
-	0x72, 0x2e, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x06, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74,
-	0x22, 0x50, 0x0a, 0x13, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x69, 0x63, 0x6b, 0x65,
-	0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x69, 0x63, 0x6b,
-	0x65, 0x74, 0x49, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72,
-	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
-	0x72, 0x65, 0x22, 0x6b, 0x0a, 0x14, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x69, 0x63, 0x6b,
-	0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61,
-	0x6c, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x69, 0x64,
-	0x12, 0x27, 0x0a, 0x06, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x0f, 0x2e, 0x73, 0x68, 0x72, 0x65, 0x64, 0x64, 0x72, 0x2e, 0x54, 0x69, 0x63, 0x6b, 0x65,
-	0x74, 0x52, 0x06, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x72, 0x72,
-	0x6f, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x42,
-	0x29, 0x5a, 0x27, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x61, 0x6c,
-	0x65, 0x63, 0x73, 0x61, 0x76, 0x76, 0x79, 0x2f, 0x73, 0x68, 0x72, 0x65, 0x64, 0x64, 0x72, 0x2f,
-	0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x03, 0x61, 0x70, 0x69, 0x1a, 0x0a, 0x61, 0x75, 0x74, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x22, 0x90, 0x01, 0x0a, 0x06, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x65,
+	0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x65,
+	0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x63,
+	0x5f, 0x6b, 0x65, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x75, 0x62, 0x6c,
+	0x69, 0x63, 0x4b, 0x65, 0x79, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64,
+	0x5f, 0x61, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x64, 0x41, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f,
+	0x61, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x64, 0x41, 0x74, 0x22, 0x5f, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x30, 0x0a, 0x0b, 0x61, 0x75, 0x74, 0x68, 0x5f,
+	0x68, 0x65, 0x61, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x52, 0x0a, 0x61,
+	0x75, 0x74, 0x68, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76, 0x65,
+	0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x65, 0x76, 0x65,
+	0x6e, 0x74, 0x49, 0x64, 0x22, 0x38, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x65,
+	0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x23, 0x0a, 0x06, 0x74, 0x69, 0x63,
+	0x6b, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x06, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x32, 0x4b,
+	0x0a, 0x0d, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
+	0x3a, 0x0a, 0x09, 0x47, 0x65, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x15, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x69, 0x63,
+	0x6b, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x29, 0x5a, 0x27, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x61, 0x6c, 0x65, 0x63, 0x73, 0x61,
+	0x76, 0x76, 0x79, 0x2f, 0x73, 0x68, 0x72, 0x65, 0x64, 0x64, 0x72, 0x2f, 0x73, 0x65, 0x72, 0x76,
+	0x65, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -820,33 +247,23 @@ func file_tickets_proto_rawDescGZIP() []byte {
 	return file_tickets_proto_rawDescData
 }
 
-var file_tickets_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_tickets_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_tickets_proto_goTypes = []interface{}{
-	(*TicketPayload)(nil),        // 0: shreddr.TicketPayload
-	(*Ticket)(nil),               // 1: shreddr.Ticket
-	(*ListTicketsRequest)(nil),   // 2: shreddr.ListTicketsRequest
-	(*ListTicketsResponse)(nil),  // 3: shreddr.ListTicketsResponse
-	(*GetTicketRequest)(nil),     // 4: shreddr.GetTicketRequest
-	(*GetTicketResponse)(nil),    // 5: shreddr.GetTicketResponse
-	(*CreateTicketRequest)(nil),  // 6: shreddr.CreateTicketRequest
-	(*CreateTicketResponse)(nil), // 7: shreddr.CreateTicketResponse
-	(*RedeemTicketRequest)(nil),  // 8: shreddr.RedeemTicketRequest
-	(*RedeemTicketResponse)(nil), // 9: shreddr.RedeemTicketResponse
-	(*VerifyTicketRequest)(nil),  // 10: shreddr.VerifyTicketRequest
-	(*VerifyTicketResponse)(nil), // 11: shreddr.VerifyTicketResponse
+	(*Ticket)(nil),            // 0: api.Ticket
+	(*GetTicketRequest)(nil),  // 1: api.GetTicketRequest
+	(*GetTicketResponse)(nil), // 2: api.GetTicketResponse
+	(*AuthHeader)(nil),        // 3: api.AuthHeader
 }
 var file_tickets_proto_depIdxs = []int32{
-	0, // 0: shreddr.Ticket.payload:type_name -> shreddr.TicketPayload
-	1, // 1: shreddr.ListTicketsResponse.tickets:type_name -> shreddr.Ticket
-	1, // 2: shreddr.GetTicketResponse.ticket:type_name -> shreddr.Ticket
-	1, // 3: shreddr.CreateTicketResponse.ticket:type_name -> shreddr.Ticket
-	1, // 4: shreddr.RedeemTicketResponse.ticket:type_name -> shreddr.Ticket
-	1, // 5: shreddr.VerifyTicketResponse.ticket:type_name -> shreddr.Ticket
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	3, // 0: api.GetTicketRequest.auth_header:type_name -> api.AuthHeader
+	0, // 1: api.GetTicketResponse.ticket:type_name -> api.Ticket
+	1, // 2: api.TicketService.GetTicket:input_type -> api.GetTicketRequest
+	2, // 3: api.TicketService.GetTicket:output_type -> api.GetTicketResponse
+	3, // [3:4] is the sub-list for method output_type
+	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_tickets_proto_init() }
@@ -854,20 +271,9 @@ func file_tickets_proto_init() {
 	if File_tickets_proto != nil {
 		return
 	}
+	file_auth_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_tickets_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TicketPayload); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Ticket); i {
 			case 0:
 				return &v.state
@@ -879,31 +285,7 @@ func file_tickets_proto_init() {
 				return nil
 			}
 		}
-		file_tickets_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListTicketsRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListTicketsResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_tickets_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetTicketRequest); i {
 			case 0:
 				return &v.state
@@ -915,80 +297,8 @@ func file_tickets_proto_init() {
 				return nil
 			}
 		}
-		file_tickets_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_tickets_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetTicketResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateTicketRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateTicketResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RedeemTicketRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RedeemTicketResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*VerifyTicketRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_tickets_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*VerifyTicketResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1006,9 +316,9 @@ func file_tickets_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_tickets_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_tickets_proto_goTypes,
 		DependencyIndexes: file_tickets_proto_depIdxs,

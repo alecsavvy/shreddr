@@ -15,14 +15,20 @@ import (
 )
 
 type Server struct {
-	db      *db.Queries
+	db      db.Querier
 	server  *http.Server
 	address string
 	port    string
 	e       *echo.Echo
+
+	jwtSecret []byte
 }
 
-var _ apiconnect.ShreddrServiceHandler = (*Server)(nil)
+var _ apiconnect.VenueServiceHandler = (*Server)(nil)
+var _ apiconnect.TicketServiceHandler = (*Server)(nil)
+var _ apiconnect.UserServiceHandler = (*Server)(nil)
+var _ apiconnect.EventServiceHandler = (*Server)(nil)
+var _ apiconnect.AuthServiceHandler = (*Server)(nil)
 
 func NewServer() (*Server, error) {
 	dbURL := os.Getenv("DATABASE_URL")
@@ -67,7 +73,15 @@ func NewServer() (*Server, error) {
 	e.Use(middleware.Recover())
 
 	rpcGroup := e.Group("")
-	path, connectHandler := apiconnect.NewShreddrServiceHandler(s)
+	path, connectHandler := apiconnect.NewVenueServiceHandler(s)
+	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
+	path, connectHandler = apiconnect.NewTicketServiceHandler(s)
+	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
+	path, connectHandler = apiconnect.NewUserServiceHandler(s)
+	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
+	path, connectHandler = apiconnect.NewEventServiceHandler(s)
+	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
+	path, connectHandler = apiconnect.NewAuthServiceHandler(s)
 	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
 
 	// add health check handler
@@ -80,6 +94,12 @@ func NewServer() (*Server, error) {
 	})
 
 	s.e = e
+
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		jwtSecret = "dev-jwt-secret"
+	}
+	s.jwtSecret = []byte(jwtSecret)
 
 	return s, nil
 }

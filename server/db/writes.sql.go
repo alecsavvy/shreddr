@@ -12,28 +12,26 @@ import (
 )
 
 const insertEvent = `-- name: InsertEvent :one
-insert into events (id, name, description, date, location, creator_address, price_cents, image_url) values ($1, $2, $3, $4, $5, $6, $7, $8) returning id, name, description, date, location, creator_address, price_cents, image_url, created_at, updated_at
+insert into events (id, name, description, date, venue_id, price_cents, image_url) values ($1, $2, $3, $4, $5, $6, $7) returning id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at
 `
 
 type InsertEventParams struct {
-	ID             int32
-	Name           string
-	Description    string
-	Date           pgtype.Timestamp
-	Location       interface{}
-	CreatorAddress string
-	PriceCents     int64
-	ImageUrl       string
+	ID          string           `json:"id"`
+	Name        string           `json:"name"`
+	Description string           `json:"description"`
+	Date        pgtype.Timestamp `json:"date"`
+	VenueID     string           `json:"venue_id"`
+	PriceCents  int64            `json:"price_cents"`
+	ImageUrl    string           `json:"image_url"`
 }
 
-func (q *Queries) InsertEvent(ctx context.Context, arg InsertEventParams) (Event, error) {
+func (q *Queries) InsertEvent(ctx context.Context, arg *InsertEventParams) (*Event, error) {
 	row := q.db.QueryRow(ctx, insertEvent,
 		arg.ID,
 		arg.Name,
 		arg.Description,
 		arg.Date,
-		arg.Location,
-		arg.CreatorAddress,
+		arg.VenueID,
 		arg.PriceCents,
 		arg.ImageUrl,
 	)
@@ -43,33 +41,67 @@ func (q *Queries) InsertEvent(ctx context.Context, arg InsertEventParams) (Event
 		&i.Name,
 		&i.Description,
 		&i.Date,
-		&i.Location,
-		&i.CreatorAddress,
+		&i.VenueID,
 		&i.PriceCents,
 		&i.ImageUrl,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
 const insertUser = `-- name: InsertUser :one
-insert into users (id, wallet_address) values ($1, $2) returning id, wallet_address, created_at, updated_at
+insert into users (public_key) values ($1) returning public_key, created_at, updated_at
 `
 
-type InsertUserParams struct {
-	ID            int32
-	WalletAddress string
+func (q *Queries) InsertUser(ctx context.Context, publicKey string) (*User, error) {
+	row := q.db.QueryRow(ctx, insertUser, publicKey)
+	var i User
+	err := row.Scan(&i.PublicKey, &i.CreatedAt, &i.UpdatedAt)
+	return &i, err
 }
 
-func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, insertUser, arg.ID, arg.WalletAddress)
-	var i User
+const insertVenue = `-- name: InsertVenue :one
+insert into venues (id, name, description, latitude, longitude, country, region, city, capacity) values ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at
+`
+
+type InsertVenueParams struct {
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Latitude    float64 `json:"latitude"`
+	Longitude   float64 `json:"longitude"`
+	Country     string  `json:"country"`
+	Region      string  `json:"region"`
+	City        string  `json:"city"`
+	Capacity    int32   `json:"capacity"`
+}
+
+func (q *Queries) InsertVenue(ctx context.Context, arg *InsertVenueParams) (*Venue, error) {
+	row := q.db.QueryRow(ctx, insertVenue,
+		arg.ID,
+		arg.Name,
+		arg.Description,
+		arg.Latitude,
+		arg.Longitude,
+		arg.Country,
+		arg.Region,
+		arg.City,
+		arg.Capacity,
+	)
+	var i Venue
 	err := row.Scan(
 		&i.ID,
-		&i.WalletAddress,
+		&i.Name,
+		&i.Description,
+		&i.Latitude,
+		&i.Longitude,
+		&i.Country,
+		&i.Region,
+		&i.City,
+		&i.Capacity,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }

@@ -1,41 +1,27 @@
 syntax = "proto3";
 
-package shreddr;
+package api;
+
+import "auth.proto";
 
 option go_package = "github.com/alecsavvy/shreddr/server/api";
+
+service UserService {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+}
 
 // User represents a user account
 message User {
   int32 id = 1; // numeric id
-  string wallet_address = 2; // Primary Solana wallet address
+  string public_key = 2; // Primary Solana wallet address
   string created_at = 3; // ISO 8601 timestamp
   string updated_at = 4; // ISO 8601 timestamp
 }
 
 message GetUserRequest {
-  string user_id = 1;
+  AuthHeader auth_header = 1;
 }
 
 message GetUserResponse {
   User user = 1;
-}
-
-message GetUserByWalletRequest {
-  string wallet_address = 1;
-}
-
-message GetUserByWalletResponse {
-  User user = 1;
-}
-
-message CreateUserRequest {
-  // Signed message from Phantom Connect that contains the public key
-  // Used to verify the public key is owned by the user
-  string signature = 1;
-  // Solana ED25519 public key, must match the signature
-  string address = 2;
-}
-
-message CreateUserResponse {
-  bool success = 1;
 }

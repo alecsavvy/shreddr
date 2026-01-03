@@ -9,21 +9,33 @@ import (
 )
 
 type Event struct {
-	ID             int32
-	Name           string
-	Description    string
-	Date           pgtype.Timestamp
-	Location       interface{}
-	CreatorAddress string
-	PriceCents     int64
-	ImageUrl       string
-	CreatedAt      pgtype.Timestamp
-	UpdatedAt      pgtype.Timestamp
+	ID          string           `json:"id"`
+	Name        string           `json:"name"`
+	Description string           `json:"description"`
+	Date        pgtype.Timestamp `json:"date"`
+	VenueID     string           `json:"venue_id"`
+	PriceCents  int64            `json:"price_cents"`
+	ImageUrl    string           `json:"image_url"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 }
 
 type User struct {
-	ID            int32
-	WalletAddress string
-	CreatedAt     pgtype.Timestamp
-	UpdatedAt     pgtype.Timestamp
+	PublicKey string           `json:"public_key"`
+	CreatedAt pgtype.Timestamp `json:"created_at"`
+	UpdatedAt pgtype.Timestamp `json:"updated_at"`
+}
+
+type Venue struct {
+	ID          string           `json:"id"`
+	Name        string           `json:"name"`
+	Description string           `json:"description"`
+	Latitude    float64          `json:"latitude"`
+	Longitude   float64          `json:"longitude"`
+	Country     string           `json:"country"`
+	Region      string           `json:"region"`
+	City        string           `json:"city"`
+	Capacity    int32            `json:"capacity"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 }
