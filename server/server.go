@@ -46,6 +46,11 @@ func NewServer() (*Server, error) {
 		port = "8080"
 	}
 
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		jwtSecret = "dev-jwt-secret"
+	}
+
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		return nil, err
@@ -95,10 +100,6 @@ func NewServer() (*Server, error) {
 
 	s.e = e
 
-	jwtSecret := os.Getenv("JWT_SECRET")
-	if jwtSecret == "" {
-		jwtSecret = "dev-jwt-secret"
-	}
 	s.jwtSecret = []byte(jwtSecret)
 
 	return s, nil

@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { usePhantom } from "@phantom/react-sdk"
 import { ArrowLeft, Ticket, CalendarDays, MapPin, QrCode, Check } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
@@ -13,6 +14,7 @@ export const Route = createFileRoute('/events/$eventId/')({
 
 function EventDetailsPage() {
   const { eventId } = Route.useParams()
+  const { isConnected } = usePhantom()
   const event = getEventById(eventId)
   const [showQR, setShowQR] = useState(false)
   const { getTicketsForEvent } = useTickets()
@@ -101,8 +103,8 @@ function EventDetailsPage() {
         </Link>
       ) : (
         <Link
-          to="/events/$eventId/purchase/payment"
-          params={{ eventId }}
+          to={isConnected ? "/events/$eventId/purchase/payment" : "/user"}
+          params={isConnected ? { eventId } : undefined}
           className={cn(
             "group block rounded-xl border border-primary/30 bg-primary/5 p-4",
             "transition-all duration-200",

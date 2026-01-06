@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { usePhantom } from "@phantom/react-sdk"
 import { ArrowLeft } from 'lucide-react'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { CoinflowCheckout } from '@/components/coinflow-checkout'
 import { getEventById } from '@/lib/events-data'
 import type { SignedTicket } from '@/lib/types'
@@ -11,8 +12,16 @@ export const Route = createFileRoute('/events/$eventId/purchase/payment')({
 
 function PaymentPage() {
   const { eventId } = Route.useParams()
+  const { isConnected } = usePhantom()
   const event = getEventById(eventId)
   const navigate = useNavigate()
+
+  // Redirect to profile page if not logged in
+  useEffect(() => {
+    if (!isConnected) {
+      navigate({ to: '/user' })
+    }
+  }, [isConnected, navigate])
 
   const handleSuccess = useCallback((ticket: SignedTicket) => {
     navigate({
