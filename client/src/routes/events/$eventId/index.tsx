@@ -103,7 +103,7 @@ function EventDetailsPage() {
         </Link>
       ) : (
         <Link
-          to={isConnected ? "/events/$eventId/purchase/payment" : "/user"}
+          to={isConnected ? "/events/$eventId/purchase/payment" : "/login"}
           params={isConnected ? { eventId } : undefined}
           className={cn(
             "group block rounded-xl border border-primary/30 bg-primary/5 p-4",

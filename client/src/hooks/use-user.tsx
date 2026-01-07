@@ -1,20 +1,18 @@
 import { useCallback, useState } from 'react'
 import { useSolana } from '@phantom/react-sdk'
-import { useMutation, useQuery } from '@connectrpc/connect-query'
-import { createUser, getUserByWallet } from '@/gen/service-ShreddrService_connectquery'
 import bs58 from 'bs58'
 
-export type UserRegistrationStatus = 'idle' | 'signing' | 'registering' | 'success' | 'error'
+export type UserRegistrationStatus = 'idle' | 'signing' | 'success' | 'error'
 
 /**
- * Hook to manage user registration and lookup via ConnectRPC
+ * Hook to manage user wallet connection and signing
  * 
  * Usage:
  * ```tsx
- * const { registerUser, status, error, user } = useUser()
+ * const { signWallet, status, error } = useUser()
  * 
- * // Register a new user (requires wallet signature)
- * await registerUser()
+ * // Sign with wallet
+ * await signWallet()
  * ```
  */
 export function useUser() {
@@ -24,25 +22,14 @@ export function useUser() {
 
   const walletAddress = solana?.publicKey || null
 
-  // Query for existing user by wallet
-  const userQuery = useQuery(
-    getUserByWallet,
-    { walletAddress: walletAddress || '' },
-    { enabled: !!walletAddress }
-  )
-
-  // Mutation to create user
-  const createUserMutation = useMutation(createUser)
-
   /**
-   * Register the current wallet as a user
-   * Signs the public key bytes with the wallet and sends to server
+   * Sign the public key bytes with the wallet
    */
-  const registerUser = useCallback(async (): Promise<boolean> => {
+  const signWallet = useCallback(async (): Promise<{ signature: string } | null> => {
     if (!solana || !isAvailable || !walletAddress) {
       setError('Wallet not connected')
       setStatus('error')
-      return false
+      return null
     }
 
     try {
@@ -53,58 +40,35 @@ export function useUser() {
       const publicKeyBytes = bs58.decode(walletAddress)
 
       // Sign the public key bytes with the wallet
-      // This matches the Go test: wallet.PrivateKey.Sign(pubkey.Bytes())
       const signResult = await solana.signMessage(publicKeyBytes)
 
       if (!signResult || !signResult.signature) {
         throw new Error('Failed to sign message')
       }
 
-      // Convert signature to base58 string (matches Go's signature.String())
+      // Convert signature to base58 string
       const signatureBase58 = bs58.encode(signResult.signature)
-
-      setStatus('registering')
-
-      // Call the CreateUser RPC
-      await createUserMutation.mutateAsync({
-        signature: signatureBase58,
-        address: walletAddress,
-      })
 
       setStatus('success')
 
-      // Refetch user data
-      await userQuery.refetch()
-
-      return true
+      return { signature: signatureBase58 }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to register user'
+      const errorMessage = err instanceof Error ? err.message : 'Failed to sign'
       setError(errorMessage)
       setStatus('error')
-      return false
+      return null
     }
-  }, [solana, isAvailable, walletAddress, createUserMutation, userQuery])
-
-  /**
-   * Check if the current wallet is already registered
-   */
-  const isRegistered = userQuery.data?.user !== undefined
+  }, [solana, isAvailable, walletAddress])
 
   return {
-    // User data
-    user: userQuery.data?.user,
-    isRegistered,
-    isLoading: userQuery.isLoading,
-
-    // Registration
-    registerUser,
+    // Signing
+    signWallet,
     status,
     error,
-    isRegistering: status === 'signing' || status === 'registering',
+    isSigning: status === 'signing',
 
     // Wallet info
     walletAddress,
     isWalletConnected: !!walletAddress,
   }
 }
-
