@@ -4,6 +4,7 @@ import { Ticket, Calendar, LogIn, ChevronRight, CheckCircle } from 'lucide-react
 import { cn } from '@/lib/utils'
 import { useTickets } from '@/hooks/use-tickets'
 import { formatShortDate } from '@/lib/events-data'
+import { LoginLink } from '@/components/login-link'
 
 export const Route = createFileRoute('/tickets')({
   component: TicketsPage,
@@ -82,8 +83,7 @@ function TicketsPage() {
           </p>
         </section>
 
-        <Link
-          to="/login"
+        <LoginLink
           className={cn(
             "flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3",
             "text-base font-semibold text-primary-foreground",
@@ -93,7 +93,7 @@ function TicketsPage() {
         >
           <LogIn className="h-5 w-5" />
           Login
-        </Link>
+        </LoginLink>
       </div>
     )
   }

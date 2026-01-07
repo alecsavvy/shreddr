@@ -1,8 +1,9 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { usePhantom } from "@phantom/react-sdk"
 import { Settings, Ticket, ChevronRight, LogIn, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTickets } from '@/hooks/use-tickets'
+import { LoginLink } from '@/components/login-link'
 
 export const Route = createFileRoute('/user/')({
   component: UserPage,
@@ -53,8 +54,7 @@ function UserPage() {
           </p>
         </section>
 
-        <Link
-          to="/login"
+        <LoginLink
           className={cn(
             "flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3",
             "text-base font-semibold text-primary-foreground",
@@ -64,7 +64,7 @@ function UserPage() {
         >
           <LogIn className="h-5 w-5" />
           Login
-        </Link>
+        </LoginLink>
       </div>
     )
   }

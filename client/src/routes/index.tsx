@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { MapPin, CalendarDays, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { events } from '@/lib/events-data'
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -57,11 +58,7 @@ function EventCard({
 
 function Index() {
   // Placeholder upcoming events based on user location
-  const upcomingEvents = [
-    { id: '1', name: 'Summer Music Festival', date: '2025-07-15', location: 'Los Angeles, CA' },
-    { id: '2', name: 'Tech Conference 2025', date: '2025-08-20', location: 'San Francisco, CA' },
-    { id: '3', name: 'Art Gallery Opening', date: '2025-06-10', location: 'New York, NY' },
-  ]
+  const upcomingEvents = events.slice(0, 3)
 
   return (
     <div className="space-y-8">

@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { usePhantom } from '@phantom/react-sdk'
 import { Loader2 } from 'lucide-react'
+import { consumeAuthRedirect } from '@/lib/auth-redirect'
 
 export const Route = createFileRoute('/auth/callback')({
   component: AuthCallback,
@@ -12,9 +13,8 @@ function AuthCallback() {
   const { isConnected } = usePhantom()
 
   useEffect(() => {
-    // Once connected, redirect to home
     if (isConnected) {
-      navigate({ to: '/' })
+      navigate({ to: consumeAuthRedirect() })
     }
   }, [isConnected, navigate])
 

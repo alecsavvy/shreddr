@@ -7,6 +7,7 @@ import { getEventById, formatEventDate, formatPrice } from '@/lib/events-data'
 import { EventQR } from '@/components/event-qr'
 import { Modal } from '@/components/modal'
 import { useTickets } from '@/hooks/use-tickets'
+import { LoginLink } from '@/components/login-link'
 
 export const Route = createFileRoute('/events/$eventId/')({
   component: EventDetailsPage,
@@ -66,7 +67,7 @@ function EventDetailsPage() {
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <MapPin className="h-4 w-4 shrink-0" />
-            <span>{event.venue}</span>
+            <span>{event.location}</span>
           </div>
         </div>
       </section>
@@ -101,10 +102,10 @@ function EventDetailsPage() {
             <Ticket className="h-8 w-8 text-emerald-500/50" />
           </div>
         </Link>
-      ) : (
+      ) : isConnected ? (
         <Link
-          to={isConnected ? "/events/$eventId/purchase/payment" : "/login"}
-          params={isConnected ? { eventId } : undefined}
+          to="/events/$eventId/purchase/payment"
+          params={{ eventId }}
           className={cn(
             "group block rounded-xl border border-primary/30 bg-primary/5 p-4",
             "transition-all duration-200",
@@ -124,6 +125,27 @@ function EventDetailsPage() {
             </div>
           </div>
         </Link>
+      ) : (
+        <LoginLink
+          className={cn(
+            "group block rounded-xl border border-primary/30 bg-primary/5 p-4",
+            "transition-all duration-200",
+            "hover:border-primary/50 hover:bg-primary/10 active:scale-[0.98]"
+          )}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Ticket Price</p>
+              <p className="text-2xl font-bold text-primary">{formatPrice(event.price)}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-primary opacity-70 transition-opacity group-hover:opacity-100">
+                Purchase
+              </span>
+              <Ticket className="h-8 w-8 text-primary/50" />
+            </div>
+          </div>
+        </LoginLink>
       )}
 
       {/* QR Code Button */}
@@ -152,7 +174,7 @@ function EventDetailsPage() {
             eventId={event.id} 
             eventName={event.name} 
             eventDate={event.date}
-            eventVenue={event.venue}
+            eventVenue={event.location}
             size={250} 
           />
           

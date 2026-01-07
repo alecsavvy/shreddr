@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useModal, usePhantom } from "@phantom/react-sdk"
 import { useEffect } from 'react'
+import { consumeAuthRedirect } from '@/lib/auth-redirect'
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -13,7 +14,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (isConnected) {
-      navigate({ to: '/' })
+      navigate({ to: consumeAuthRedirect() })
     } else {
       open()
     }

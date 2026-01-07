@@ -239,7 +239,7 @@ function PurchaseSuccessPage() {
           ticketId: ticket.payload.ticketId,
           eventName: event.name,
           eventDate: event.date,
-          venue: event.venue,
+          venue: event.location,
         })
       }, 100)
       return
@@ -249,7 +249,7 @@ function PurchaseSuccessPage() {
       ticketId: ticket.payload.ticketId,
       eventName: event.name,
       eventDate: event.date,
-      venue: event.venue,
+      venue: event.location,
     })
   }, [ticket, event])
 
@@ -261,7 +261,7 @@ function PurchaseSuccessPage() {
     const url = getGoogleCalendarUrl(
       event.name,
       event.date,
-      event.venue,
+      event.location,
       ticketUrl
     )
     
@@ -276,7 +276,7 @@ function PurchaseSuccessPage() {
     const icsContent = generateICS(
       event.name,
       event.date,
-      event.venue,
+      event.location,
       ticketUrl
     )
     
@@ -448,7 +448,7 @@ function PurchaseSuccessPage() {
               <div className="mt-6 text-center">
                 <p className="font-semibold text-white">{event.name}</p>
                 <p className="text-sm text-white/70">{formatEventDate(event.date)}</p>
-                <p className="text-sm text-white/70">{event.venue}</p>
+                <p className="text-sm text-white/70">{event.location}</p>
               </div>
             )}
           </div>

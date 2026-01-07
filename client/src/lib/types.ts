@@ -3,7 +3,7 @@ export interface Event {
   id: string
   name: string
   date: string
-  venue: string
+  location: string
   description: string
   price: number // in cents
   imageUrl?: string

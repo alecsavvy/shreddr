@@ -250,7 +250,7 @@ function TicketDetailsPage() {
       ticketId: ticket.payload.ticketId,
       eventName: event.name,
       eventDate: event.date,
-      venue: event.venue,
+      venue: event.location,
     })
   }, [ticket, event])
 
@@ -262,7 +262,7 @@ function TicketDetailsPage() {
     const url = getGoogleCalendarUrl(
       event.name,
       event.date,
-      event.venue,
+      event.location,
       ticketUrl
     )
     
@@ -277,7 +277,7 @@ function TicketDetailsPage() {
     const icsContent = generateICS(
       event.name,
       event.date,
-      event.venue,
+      event.location,
       ticketUrl
     )
     
@@ -335,7 +335,7 @@ function TicketDetailsPage() {
           {event && (
             <div className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="h-4 w-4 shrink-0" />
-              <span>{event.venue}</span>
+              <span>{event.location}</span>
             </div>
           )}
         </div>
@@ -527,7 +527,7 @@ function TicketDetailsPage() {
             <div className="mt-6 text-center">
               <p className="font-semibold text-white">{event.name}</p>
               <p className="text-sm text-white/70">{formatEventDate(event.date)}</p>
-              <p className="text-sm text-white/70">{event.venue}</p>
+              <p className="text-sm text-white/70">{event.location}</p>
             </div>
           )}
         </div>
