@@ -11,13 +11,13 @@ function EventCard({
   id, 
   name, 
   date,
-  venue,
+  location,
   price,
 }: { 
   id: string
   name: string
   date: string
-  venue: string
+  location: string
   price: number
 }) {
   return (
@@ -42,7 +42,7 @@ function EventCard({
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4 shrink-0" />
-            <span className="truncate">{venue}</span>
+            <span className="truncate">{location}</span>
           </div>
         </div>
         <div className="text-sm font-semibold text-primary">
