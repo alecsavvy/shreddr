@@ -11,6 +11,16 @@ func (s *Server) Login(c echo.Context) error {
 	return c.String(http.StatusOK, "ok")
 }
 
+// @Summary Create a new user
+// @Description Create a new user
+// @Accept json
+// @Produce json
+// @Param user body db.User true "User"
+// @Success 200 {object} db.User
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /user [post]
+// @Tags users
 func (s *Server) CreateUser(c echo.Context) error {
 	var body db.User
 	if err := c.Bind(&body); err != nil {

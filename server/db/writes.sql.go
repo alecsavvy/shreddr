@@ -7,8 +7,7 @@ package db
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
+	"time"
 )
 
 const deleteEvent = `-- name: DeleteEvent :exec
@@ -43,13 +42,13 @@ insert into events (id, name, description, date, venue_id, price_cents, image_ur
 `
 
 type InsertEventParams struct {
-	ID          string           `json:"id"`
-	Name        string           `json:"name"`
-	Description string           `json:"description"`
-	Date        pgtype.Timestamp `json:"date"`
-	VenueID     string           `json:"venue_id"`
-	PriceCents  int64            `json:"price_cents"`
-	ImageUrl    string           `json:"image_url"`
+	ID          string    `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Date        time.Time `json:"date"`
+	VenueID     string    `json:"venue_id"`
+	PriceCents  int64     `json:"price_cents"`
+	ImageUrl    string    `json:"image_url"`
 }
 
 func (q *Queries) InsertEvent(ctx context.Context, arg *InsertEventParams) (*Event, error) {

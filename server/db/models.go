@@ -5,40 +5,40 @@
 package db
 
 import (
-	"github.com/jackc/pgx/v5/pgtype"
+	"time"
 )
 
 type Event struct {
-	ID          string           `json:"id"`
-	Name        string           `json:"name"`
-	Description string           `json:"description"`
-	Date        pgtype.Timestamp `json:"date"`
-	VenueID     string           `json:"venue_id"`
-	PriceCents  int64            `json:"price_cents"`
-	ImageUrl    string           `json:"image_url"`
-	CreatedAt   pgtype.Timestamp `json:"created_at"`
-	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	DeletedAt   pgtype.Timestamp `json:"deleted_at"`
+	ID          string     `json:"id"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Date        time.Time  `json:"date"`
+	VenueID     string     `json:"venue_id"`
+	PriceCents  int64      `json:"price_cents"`
+	ImageUrl    string     `json:"image_url"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	DeletedAt   *time.Time `json:"deleted_at"`
 }
 
 type User struct {
-	PublicKey string           `json:"public_key"`
-	CreatedAt pgtype.Timestamp `json:"created_at"`
-	UpdatedAt pgtype.Timestamp `json:"updated_at"`
-	DeletedAt pgtype.Timestamp `json:"deleted_at"`
+	PublicKey string     `json:"public_key"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt time.Time  `json:"updated_at"`
+	DeletedAt *time.Time `json:"deleted_at"`
 }
 
 type Venue struct {
-	ID          string           `json:"id"`
-	Name        string           `json:"name"`
-	Description string           `json:"description"`
-	Latitude    float64          `json:"latitude"`
-	Longitude   float64          `json:"longitude"`
-	Country     string           `json:"country"`
-	Region      string           `json:"region"`
-	City        string           `json:"city"`
-	Capacity    int32            `json:"capacity"`
-	CreatedAt   pgtype.Timestamp `json:"created_at"`
-	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	DeletedAt   pgtype.Timestamp `json:"deleted_at"`
+	ID          string     `json:"id"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Latitude    float64    `json:"latitude"`
+	Longitude   float64    `json:"longitude"`
+	Country     string     `json:"country"`
+	Region      string     `json:"region"`
+	City        string     `json:"city"`
+	Capacity    int32      `json:"capacity"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	DeletedAt   *time.Time `json:"deleted_at"`
 }

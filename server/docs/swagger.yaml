@@ -1,4 +1,16 @@
 basePath: /v1
+definitions:
+  db.User:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      public_key:
+        type: string
+      updated_at:
+        type: string
+    type: object
 host: api.shreddr.live
 info:
   contact: {}
@@ -6,5 +18,39 @@ info:
   termsOfService: http://swagger.io/terms/
   title: Shreddr API
   version: "1.0"
-paths: {}
+paths:
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/db.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new user
+      tags:
+      - users
 swagger: "2.0"
