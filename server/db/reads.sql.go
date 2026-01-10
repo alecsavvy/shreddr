@@ -10,7 +10,7 @@ import (
 )
 
 const getEvent = `-- name: GetEvent :one
-select id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at from events where id = $1
+select id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at, deleted_at from events where id = $1
 `
 
 func (q *Queries) GetEvent(ctx context.Context, id string) (*Event, error) {
@@ -26,23 +26,29 @@ func (q *Queries) GetEvent(ctx context.Context, id string) (*Event, error) {
 		&i.ImageUrl,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.DeletedAt,
 	)
 	return &i, err
 }
 
 const getUser = `-- name: GetUser :one
-select public_key, created_at, updated_at from users where public_key = $1
+select public_key, created_at, updated_at, deleted_at from users where public_key = $1
 `
 
 func (q *Queries) GetUser(ctx context.Context, publicKey string) (*User, error) {
 	row := q.db.QueryRow(ctx, getUser, publicKey)
 	var i User
-	err := row.Scan(&i.PublicKey, &i.CreatedAt, &i.UpdatedAt)
+	err := row.Scan(
+		&i.PublicKey,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+	)
 	return &i, err
 }
 
 const getVenue = `-- name: GetVenue :one
-select id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at from venues where id = $1
+select id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at, deleted_at from venues where id = $1
 `
 
 func (q *Queries) GetVenue(ctx context.Context, id string) (*Venue, error) {
@@ -60,12 +66,13 @@ func (q *Queries) GetVenue(ctx context.Context, id string) (*Venue, error) {
 		&i.Capacity,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.DeletedAt,
 	)
 	return &i, err
 }
 
 const listEvents = `-- name: ListEvents :many
-select id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at from events
+select id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at, deleted_at from events
 `
 
 func (q *Queries) ListEvents(ctx context.Context) ([]*Event, error) {
@@ -87,6 +94,7 @@ func (q *Queries) ListEvents(ctx context.Context) ([]*Event, error) {
 			&i.ImageUrl,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.DeletedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -99,7 +107,7 @@ func (q *Queries) ListEvents(ctx context.Context) ([]*Event, error) {
 }
 
 const listVenues = `-- name: ListVenues :many
-select id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at from venues
+select id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at, deleted_at from venues
 `
 
 func (q *Queries) ListVenues(ctx context.Context) ([]*Venue, error) {
@@ -123,6 +131,7 @@ func (q *Queries) ListVenues(ctx context.Context) ([]*Venue, error) {
 			&i.Capacity,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.DeletedAt,
 		); err != nil {
 			return nil, err
 		}

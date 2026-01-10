@@ -11,8 +11,35 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const deleteEvent = `-- name: DeleteEvent :exec
+update events set deleted_at = now() where id = $1
+`
+
+func (q *Queries) DeleteEvent(ctx context.Context, id string) error {
+	_, err := q.db.Exec(ctx, deleteEvent, id)
+	return err
+}
+
+const deleteUser = `-- name: DeleteUser :exec
+update users set deleted_at = now() where public_key = $1
+`
+
+func (q *Queries) DeleteUser(ctx context.Context, publicKey string) error {
+	_, err := q.db.Exec(ctx, deleteUser, publicKey)
+	return err
+}
+
+const deleteVenue = `-- name: DeleteVenue :exec
+update venues set deleted_at = now() where id = $1
+`
+
+func (q *Queries) DeleteVenue(ctx context.Context, id string) error {
+	_, err := q.db.Exec(ctx, deleteVenue, id)
+	return err
+}
+
 const insertEvent = `-- name: InsertEvent :one
-insert into events (id, name, description, date, venue_id, price_cents, image_url) values ($1, $2, $3, $4, $5, $6, $7) returning id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at
+insert into events (id, name, description, date, venue_id, price_cents, image_url) values ($1, $2, $3, $4, $5, $6, $7) returning id, name, description, date, venue_id, price_cents, image_url, created_at, updated_at, deleted_at
 `
 
 type InsertEventParams struct {
@@ -46,23 +73,29 @@ func (q *Queries) InsertEvent(ctx context.Context, arg *InsertEventParams) (*Eve
 		&i.ImageUrl,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.DeletedAt,
 	)
 	return &i, err
 }
 
 const insertUser = `-- name: InsertUser :one
-insert into users (public_key) values ($1) returning public_key, created_at, updated_at
+insert into users (public_key) values ($1) on conflict (public_key) do nothing returning public_key, created_at, updated_at, deleted_at
 `
 
 func (q *Queries) InsertUser(ctx context.Context, publicKey string) (*User, error) {
 	row := q.db.QueryRow(ctx, insertUser, publicKey)
 	var i User
-	err := row.Scan(&i.PublicKey, &i.CreatedAt, &i.UpdatedAt)
+	err := row.Scan(
+		&i.PublicKey,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+	)
 	return &i, err
 }
 
 const insertVenue = `-- name: InsertVenue :one
-insert into venues (id, name, description, latitude, longitude, country, region, city, capacity) values ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at
+insert into venues (id, name, description, latitude, longitude, country, region, city, capacity) values ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id, name, description, latitude, longitude, country, region, city, capacity, created_at, updated_at, deleted_at
 `
 
 type InsertVenueParams struct {
@@ -102,6 +135,7 @@ func (q *Queries) InsertVenue(ctx context.Context, arg *InsertVenueParams) (*Ven
 		&i.Capacity,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.DeletedAt,
 	)
 	return &i, err
 }

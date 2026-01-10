@@ -9,6 +9,9 @@ import (
 )
 
 type Querier interface {
+	DeleteEvent(ctx context.Context, id string) error
+	DeleteUser(ctx context.Context, publicKey string) error
+	DeleteVenue(ctx context.Context, id string) error
 	GetEvent(ctx context.Context, id string) (*Event, error)
 	GetUser(ctx context.Context, publicKey string) (*User, error)
 	GetVenue(ctx context.Context, id string) (*Venue, error)

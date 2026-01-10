@@ -1,0 +1,10 @@
+basePath: /v1
+host: api.shreddr.live
+info:
+  contact: {}
+  description: API for the Shreddr platform
+  termsOfService: http://swagger.io/terms/
+  title: Shreddr API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

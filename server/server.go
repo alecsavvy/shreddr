@@ -11,6 +11,9 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
+
+	_ "github.com/alecsavvy/shreddr/server/docs"
 )
 
 type Server struct {
@@ -23,6 +26,13 @@ type Server struct {
 	jwtSecret []byte
 }
 
+// @title Shreddr API
+// @version 1.0
+// @description API for the Shreddr platform
+// @termsOfService http://swagger.io/terms/
+
+// @host api.shreddr.live
+// @BasePath /v1
 func NewServer() (*Server, error) {
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
@@ -64,21 +74,44 @@ func NewServer() (*Server, error) {
 	queries := db.New(pgxConn)
 
 	e := echo.New()
+	e.HideBanner = true
+
 	e.Use(middleware.RequestID())
 	e.Use(middleware.RequestLogger())
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
 
-	// add health check handler
-	e.GET("/health", func(c echo.Context) error {
-		return c.String(http.StatusOK, "ok")
-	})
+	s := &Server{db: queries, address: address, port: port, e: e, jwtSecret: jwtSecretBytes}
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "welcome to the shreddr api")
-	})
+	e.GET("/swagger", echoSwagger.WrapHandler)
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
-	return &Server{db: queries, address: address, port: port, e: e, jwtSecret: jwtSecretBytes}, nil
+	v1 := e.Group("/v1")
+
+	v1.POST("/user/login", s.Login)
+	v1.POST("/user", s.CreateUser)
+	v1.GET("/user/:id", s.GetUser)
+	v1.DELETE("/user/:id", s.DeleteUser)
+
+	v1.POST("/event", s.stubRoute)
+	v1.GET("/event/:id", s.stubRoute)
+	v1.GET("/events", s.stubRoute)
+	v1.PUT("/event/:id", s.stubRoute)
+	v1.DELETE("/event/:id", s.stubRoute)
+
+	v1.POST("/venue", s.stubRoute)
+	v1.GET("/venue/:id", s.stubRoute)
+	v1.GET("/venues", s.stubRoute)
+	v1.PUT("/venue/:id", s.stubRoute)
+	v1.DELETE("/venue/:id", s.stubRoute)
+
+	v1.GET("/health", s.stubRoute)
+	v1.GET("/", s.stubRoute)
+
+	adminv1 := e.Group("/v1/admin")
+	adminv1.POST("/user", s.stubRoute)
+
+	return s, nil
 }
 
 func (s *Server) Start() error {
@@ -87,4 +120,8 @@ func (s *Server) Start() error {
 
 func (s *Server) Stop() error {
 	return s.e.Shutdown(context.Background())
+}
+
+func (s *Server) stubRoute(c echo.Context) error {
+	return c.String(http.StatusOK, "ok")
 }
