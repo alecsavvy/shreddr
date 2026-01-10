@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/alecsavvy/shreddr/server/api/apiconnect"
 	db "github.com/alecsavvy/shreddr/server/db"
 	"github.com/jackc/pgx/v5"
 	"github.com/labstack/echo/v4"
@@ -23,12 +22,6 @@ type Server struct {
 
 	jwtSecret []byte
 }
-
-var _ apiconnect.VenueServiceHandler = (*Server)(nil)
-var _ apiconnect.TicketServiceHandler = (*Server)(nil)
-var _ apiconnect.UserServiceHandler = (*Server)(nil)
-var _ apiconnect.EventServiceHandler = (*Server)(nil)
-var _ apiconnect.AuthServiceHandler = (*Server)(nil)
 
 func NewServer() (*Server, error) {
 	dbURL := os.Getenv("DATABASE_URL")
@@ -77,25 +70,13 @@ func NewServer() (*Server, error) {
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
 
-	rpcGroup := e.Group("")
-	path, connectHandler := apiconnect.NewVenueServiceHandler(s)
-	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
-	path, connectHandler = apiconnect.NewTicketServiceHandler(s)
-	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
-	path, connectHandler = apiconnect.NewUserServiceHandler(s)
-	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
-	path, connectHandler = apiconnect.NewEventServiceHandler(s)
-	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
-	path, connectHandler = apiconnect.NewAuthServiceHandler(s)
-	rpcGroup.Any(path+"*", echo.WrapHandler(connectHandler))
-
 	// add health check handler
 	e.GET("/health", func(c echo.Context) error {
-		return c.String(http.StatusOK, "howdy!")
+		return c.String(http.StatusOK, "ok")
 	})
 
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "howdy!")
+		return c.String(http.StatusOK, "welcome to the shreddr api")
 	})
 
 	s.e = e

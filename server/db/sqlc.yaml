@@ -1,8 +1,8 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "server/db/sql"
-    schema: "server/db/sql/migrations"
+    queries: "sql"
+    schema: "sql/migrations"
     gen:
       go:
         emit_interface: true
@@ -11,5 +11,5 @@ sql:
         emit_params_struct_pointers: true
         emit_result_struct_pointers: true
         package: "db"
-        out: "server/db"
+        out: "."
         sql_package: "pgx/v5"
