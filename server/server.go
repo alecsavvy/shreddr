@@ -43,6 +43,7 @@ func NewServer() (*Server, error) {
 	if jwtSecret == "" {
 		jwtSecret = "dev-jwt-secret"
 	}
+	jwtSecretBytes := []byte(jwtSecret)
 
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
@@ -62,8 +63,6 @@ func NewServer() (*Server, error) {
 
 	queries := db.New(pgxConn)
 
-	s := &Server{db: queries, address: address, port: port}
-
 	e := echo.New()
 	e.Use(middleware.RequestID())
 	e.Use(middleware.RequestLogger())
@@ -79,11 +78,7 @@ func NewServer() (*Server, error) {
 		return c.String(http.StatusOK, "welcome to the shreddr api")
 	})
 
-	s.e = e
-
-	s.jwtSecret = []byte(jwtSecret)
-
-	return s, nil
+	return &Server{db: queries, address: address, port: port, e: e, jwtSecret: jwtSecretBytes}, nil
 }
 
 func (s *Server) Start() error {
