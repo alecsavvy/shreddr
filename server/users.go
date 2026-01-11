@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"time"
 
 	db "github.com/alecsavvy/shreddr/server/db"
 	"github.com/labstack/echo/v4"
@@ -22,17 +23,20 @@ func (s *Server) Login(c echo.Context) error {
 // @Router /user [post]
 // @Tags users
 func (s *Server) CreateUser(c echo.Context) error {
-	var body db.User
-	if err := c.Bind(&body); err != nil {
+	var user db.User
+	if err := c.Bind(user); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	user, err := s.db.InsertUser(c.Request().Context(), body.PublicKey)
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
+
+	userRecord, err := s.db.InsertUser(c.Request().Context(), user.PublicKey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, user)
+	return c.JSON(http.StatusOK, userRecord)
 }
 
 func (s *Server) GetUser(c echo.Context) error {
